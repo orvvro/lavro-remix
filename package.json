@@ -16,19 +16,23 @@
     "publish": true
   },
   "dependencies": {
+    "@linaria/core": "^6.3.0",
+    "@linaria/react": "^6.3.0",
+    "@storyblok/react": "^5.4.0",
+    "@wyw-in-js/babel-preset": "^0.7.0",
     "isbot": "5.1.26",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "7.6.3"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.27.1",
     "@cloudflare/vite-plugin": "1.7.5",
     "@react-router/dev": "7.6.3",
-    "@tailwindcss/vite": "4.1.4",
-    "@types/node": "24.0.4",
+    "@types/node": "^24.0.14",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "tailwindcss": "4.1.1",
+    "@wyw-in-js/vite": "^0.7.0",
     "typescript": "5.8.3",
     "vite": "^6.0.0",
     "vite-tsconfig-paths": "5.1.4",

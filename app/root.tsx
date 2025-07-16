@@ -6,9 +6,16 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { storyblokInit, apiPlugin } from "@storyblok/react";
 
 import type { Route } from "./+types/root";
-import "./app.css";
+import getStoryblokComponents from "./lib/getStoryblokComponents";
+
+storyblokInit({
+  accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
+  use: [apiPlugin],
+  components: getStoryblokComponents(),
+});
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
