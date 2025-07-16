@@ -10,10 +10,12 @@ export default function Section({
   blok,
   children,
   className,
+  ref,
 }: {
   blok: SbBlokData;
   children: React.ReactNode;
   className?: string;
+  ref?: React.Ref<HTMLDivElement>;
 }) {
   return (
     <section className={section} {...storyblokEditable(blok)} key={blok._uid}>
@@ -21,7 +23,9 @@ export default function Section({
         blok.background.map((blok: SbBlokData) => (
           <StoryblokComponent blok={blok} key={blok._uid} />
         ))}
-      <div className={cx(defaultSpacing, className)}>{children}</div>
+      <div ref={ref} className={cx(defaultSpacing, className)}>
+        {children}
+      </div>
     </section>
   );
 }

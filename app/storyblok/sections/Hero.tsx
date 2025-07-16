@@ -4,27 +4,25 @@ import Section from "~/components/Section";
 import { formatText } from "~/lib/formatText";
 
 const Hero = ({ blok }: { blok: SbBlokData }) => (
-  console.log("Hero component rendered with blok:", blok.options),
-  (
-    <Section blok={blok}>
-      <div className={hero}>
-        <h1>{formatText(blok.headline)}</h1>
-        <p>{blok.sub_headline as string}</p>
-        <div>
-          {Array.isArray(blok.options) &&
-            blok.options.map((blok: SbBlokData) => (
-              <StoryblokComponent blok={blok} key={blok._uid} />
-            ))}
-        </div>
+  <Section blok={blok}>
+    <div className={hero}>
+      <h1>{formatText(blok.headline)}</h1>
+      <p>{blok.sub_headline as string}</p>
+      <div>
+        {Array.isArray(blok.options) &&
+          blok.options.map((blok: SbBlokData) => (
+            <StoryblokComponent blok={blok} key={blok._uid} />
+          ))}
       </div>
-    </Section>
-  )
+    </div>
+  </Section>
 );
 
 export default Hero;
 
 const hero = css`
   padding-top: 10rem;
+  padding-bottom: 8rem;
   text-align: center;
   max-width: 42rem;
   margin: 0 auto;

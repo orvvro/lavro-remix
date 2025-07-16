@@ -16,9 +16,10 @@ export const globals = css`
       --color-secondary: #1463f5;
       --default-padding: clamp(0.5rem, -0.3333rem + 4.1667vw, 3rem);
       --default-max-width: 1440px;
+      --smaller-max-width: 1024px;
       --default-section-spacing: 96px;
       --list-spacing: clamp(0.875rem, 0.3967rem + 2.3913vw, 2.25rem);
-      --header-height: 120px;
+      overflow-x: hidden;
     }
 
     @font-face {
@@ -69,6 +70,7 @@ export const globals = css`
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
     img,
