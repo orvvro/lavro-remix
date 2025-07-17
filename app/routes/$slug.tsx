@@ -7,12 +7,17 @@ import {
 } from "@storyblok/react";
 import type { LoaderFunctionArgs } from "react-router";
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, context }: LoaderFunctionArgs) => {
   const { "*": splat } = params;
   const slug = splat || "home";
 
+  console.log(context.cloudflare.env);
+
   let sbParams: ISbStoriesParams = {
-    version: "draft",
+    version:
+      context.cloudflare.env.ENVIRONMENT === "production"
+        ? "published"
+        : "draft",
   };
 
   let { data } = await getStoryblokApi()
@@ -30,6 +35,7 @@ export default function Page() {
   let { data } = useLoaderData();
 
   data = useStoryblokState(data.story);
+  // docs: https://www.storyblok.com/docs/packages/storyblok-react
 
   return <StoryblokComponent blok={data.content} />;
 }

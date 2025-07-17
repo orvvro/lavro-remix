@@ -1,21 +1,30 @@
 import { type SbBlokData, storyblokEditable } from "@storyblok/react";
 import { css } from "@linaria/core";
 import { breakPoints } from "~/assets/globals";
+import { Image } from "@unpic/react";
 
-const ExpandingContainer = ({
-  blok,
-  onPointerEnter,
-}: {
-  blok: SbBlokData;
-  onPointerEnter?: () => void;
-}) => (
+interface ExpandingContainerBlok extends SbBlokData {
+  heading: string;
+  description: string;
+  image: {
+    filename: string;
+    alt: string;
+  };
+}
+
+const ExpandingContainer = ({ blok }: { blok: ExpandingContainerBlok }) => (
   <div className={expandingContainer} {...storyblokEditable(blok)}>
     <div className={text}>
-      <h2>{blok.heading as string}</h2>
-      <p>{blok.description as string}</p>
+      <h2>{blok.heading}</h2>
+      <p>{blok.description}</p>
     </div>
     <div className={image}>
-      <img src={(blok.image as any).filename} alt={(blok.image as any).alt} />
+      <Image
+        src={blok.image.filename}
+        alt={blok.image.alt}
+        layout="fullWidth"
+        background="auto"
+      />
     </div>
   </div>
 );
