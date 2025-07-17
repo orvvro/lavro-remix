@@ -2,6 +2,7 @@ import { StoryblokComponent, type SbBlokData } from "@storyblok/react";
 import { css } from "@linaria/core";
 import Section from "~/components/Section";
 import { formatText } from "~/lib/formatText";
+import { StoryblokServerComponent } from "@storyblok/react/ssr";
 
 const Hero = ({ blok }: { blok: SbBlokData }) => (
   <Section blok={blok}>
@@ -11,7 +12,7 @@ const Hero = ({ blok }: { blok: SbBlokData }) => (
       <div>
         {Array.isArray(blok.options) &&
           blok.options.map((blok: SbBlokData) => (
-            <StoryblokComponent blok={blok} key={blok._uid} />
+            <StoryblokServerComponent blok={blok} key={blok._uid} />
           ))}
       </div>
     </div>

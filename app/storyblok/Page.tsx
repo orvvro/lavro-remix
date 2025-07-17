@@ -1,14 +1,11 @@
-import {
-  storyblokEditable,
-  StoryblokComponent,
-  type SbBlokData,
-} from "@storyblok/react";
+import { storyblokEditable, type SbBlokData } from "@storyblok/react";
+import { StoryblokServerComponent } from "@storyblok/react/ssr";
 
 const Page = ({ blok }: { blok: SbBlokData }) => (
   <main {...storyblokEditable(blok)} key={blok._uid}>
     {Array.isArray(blok?.body) &&
       blok.body.map((nestedBlok: SbBlokData) => (
-        <StoryblokComponent blok={nestedBlok} key={nestedBlok._uid} />
+        <StoryblokServerComponent blok={nestedBlok} key={nestedBlok._uid} />
       ))}
   </main>
 );

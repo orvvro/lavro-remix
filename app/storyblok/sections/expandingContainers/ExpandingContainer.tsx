@@ -24,6 +24,11 @@ const ExpandingContainer = ({ blok }: { blok: ExpandingContainerBlok }) => (
         alt={blok.image.alt}
         layout="fullWidth"
         background="auto"
+        operations={{
+          storyblok: {
+            quality: 80,
+          },
+        }}
       />
     </div>
   </div>

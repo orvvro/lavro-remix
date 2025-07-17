@@ -2,25 +2,26 @@ import { useLoaderData } from "react-router";
 import {
   getStoryblokApi,
   useStoryblokState,
-  StoryblokComponent,
   type ISbStoriesParams,
 } from "@storyblok/react";
-import type { LoaderFunctionArgs } from "react-router";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "react-router";
+import { StoryblokServerComponent } from "@storyblok/react/ssr";
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  console.log("Action called with request:", request);
+  return Response.json({ success: true }, { status: 200 });
+};
 
 export const loader = async ({ params, context }: LoaderFunctionArgs) => {
   const { "*": splat } = params;
   const slug = splat || "home";
-
-  console.log(context.cloudflare.env);
+  const env = context.cloudflare.env.ENVIRONMENT;
 
   let sbParams: ISbStoriesParams = {
-    version:
-      context.cloudflare.env.ENVIRONMENT === "production"
-        ? "published"
-        : "draft",
+    version: env === "production" ? "published" : "draft",
   };
 
-  let { data } = await getStoryblokApi()
+  const { data } = await getStoryblokApi()
     .get(`cdn/stories/${slug}`, sbParams)
     .catch(() => ({ data: null }));
 
@@ -28,7 +29,7 @@ export const loader = async ({ params, context }: LoaderFunctionArgs) => {
     throw new Response("Not Found", { status: 404 });
   }
 
-  return Response.json({ data }, { status: 404 });
+  return Response.json({ data }, { status: 200 });
 };
 
 export default function Page() {
@@ -37,5 +38,5 @@ export default function Page() {
   data = useStoryblokState(data.story);
   // docs: https://www.storyblok.com/docs/packages/storyblok-react
 
-  return <StoryblokComponent blok={data.content} />;
+  return <StoryblokServerComponent blok={data.content} />;
 }

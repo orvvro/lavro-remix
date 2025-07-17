@@ -1,10 +1,7 @@
 import { defaultSpacing } from "~/assets/globals";
 import { css, cx } from "@linaria/core";
-import {
-  type SbBlokData,
-  StoryblokComponent,
-  storyblokEditable,
-} from "@storyblok/react";
+import { type SbBlokData, storyblokEditable } from "@storyblok/react";
+import { StoryblokServerComponent } from "@storyblok/react/ssr";
 
 export default function Section({
   blok,
@@ -21,7 +18,7 @@ export default function Section({
     <section className={section} {...storyblokEditable(blok)} key={blok._uid}>
       {Array.isArray(blok.background) &&
         blok.background.map((blok: SbBlokData) => (
-          <StoryblokComponent blok={blok} key={blok._uid} />
+          <StoryblokServerComponent blok={blok} key={blok._uid} />
         ))}
       <div ref={ref} className={cx(defaultSpacing, className)}>
         {children}

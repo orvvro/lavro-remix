@@ -1,9 +1,10 @@
-import { StoryblokComponent, type SbBlokData } from "@storyblok/react";
+import { type SbBlokData } from "@storyblok/react";
 import { css } from "@linaria/core";
 import Section from "~/components/Section";
 import { breakPoints } from "~/assets/globals";
 import { useEffect, useRef } from "react";
 import { expandingContainer } from "./ExpandingContainer";
+import { StoryblokServerComponent } from "@storyblok/react/ssr";
 
 const ExpandingContainers = ({ blok }: { blok: SbBlokData }) => {
   const section = useRef<HTMLDivElement>(null);
@@ -15,7 +16,7 @@ const ExpandingContainers = ({ blok }: { blok: SbBlokData }) => {
       ) as HTMLCollectionOf<HTMLElement>
     );
 
-    all.forEach((container, index) => {
+    all.forEach((container) => {
       if (!window.matchMedia(`(max-width: ${breakPoints.laptop}rem)`).matches) {
         container.addEventListener("pointerenter", () => {
           all.forEach((container) => {
@@ -31,7 +32,7 @@ const ExpandingContainers = ({ blok }: { blok: SbBlokData }) => {
     <Section ref={section} blok={blok} className={expandingContainers}>
       {Array.isArray(blok.expanding_containers) &&
         blok.expanding_containers.map((blok) => {
-          return <StoryblokComponent blok={blok} key={blok._uid} />;
+          return <StoryblokServerComponent blok={blok} key={blok._uid} />;
         })}
     </Section>
   );

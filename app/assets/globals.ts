@@ -70,7 +70,7 @@ export const globals = css`
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     img,
