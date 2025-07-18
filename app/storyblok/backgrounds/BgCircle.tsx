@@ -40,7 +40,7 @@ const ball = css`
   transform: translate3d(0, 0, 0);
   background-image: radial-gradient(
     circle,
-    var(--color-primary),
+    var(--color-secondary),
     transparent 70%
   );
 `;
@@ -48,7 +48,7 @@ const ball = css`
 const light = css`
   background-image: radial-gradient(
     circle,
-    var(--color-secondary),
+    var(--color-primary),
     transparent 70%
   );
 `;

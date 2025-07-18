@@ -27,7 +27,7 @@ const Hero = ({ blok }: { blok: HeroBlok }) => (
 export default Hero;
 
 const hero = css`
-  padding-top: 5rem;
+  padding-top: 9rem;
   text-align: center;
   max-width: 42rem;
   margin: 0 auto;

@@ -19,7 +19,6 @@ export const globals = css`
       --smaller-max-width: 1024px;
       --default-section-spacing: 96px;
       --list-spacing: clamp(0.875rem, 0.3967rem + 2.3913vw, 2.25rem);
-      overflow-x: hidden;
     }
 
     @font-face {
@@ -364,10 +363,11 @@ export const summary = css`
 export const centeredHeading = css`
   text-align: center;
   h1 {
-    margin-bottom: 1rem;
-  }
-  p {
     margin-bottom: 2rem;
+  }
+
+  & > :last-child {
+    margin-bottom: 4rem;
   }
 `;
 

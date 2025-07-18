@@ -13,6 +13,9 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["app/*"]
-    }
+    },
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   }
 }

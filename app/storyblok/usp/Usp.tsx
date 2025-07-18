@@ -17,10 +17,7 @@ export default function UspContainer({ blok }: { blok: UspBlok }) {
         <StoryblokServerComponent blok={blok} key={blok._uid} />
       ))}
       {blok.icon.raw && (
-        <div
-          className="icon-wrapper"
-          dangerouslySetInnerHTML={{ __html: blok.icon.raw }}
-        />
+        <div dangerouslySetInnerHTML={{ __html: blok.icon.raw }} />
       )}
       <h2>{blok.heading}</h2>
       <p>{blok.text}</p>
@@ -51,11 +48,8 @@ export const uspContainer = css`
     position: sticky;
   }
 
-  & > svg {
-    margin-top: 2.5rem;
-  }
-
   & svg {
+    margin-top: 2.5rem;
     height: 2.25rem;
     width: auto;
   }

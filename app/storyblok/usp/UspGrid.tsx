@@ -5,9 +5,11 @@ import { useRef, useEffect } from "react";
 import { uspContainer } from "./Usp";
 import { breakPoints } from "~/assets/globals";
 import { css } from "@linaria/core";
+import { formatText } from "~/lib/formatText";
+import { centeredHeading } from "~/assets/globals";
 
 interface UspGridBlok extends SbBlokData {
-  title?: string;
+  heading?: string;
   usps: any[];
 }
 
@@ -46,10 +48,15 @@ export default function UspGrid({ blok }: { blok: UspGridBlok }) {
   }, []);
 
   return (
-    <Section ref={section} className={uspGrid} blok={blok}>
-      {blok.usps.map((blok) => (
-        <StoryblokServerComponent blok={blok} key={blok._uid} />
-      ))}
+    <Section ref={section} blok={blok}>
+      <div className={centeredHeading}>
+        {blok.heading && <h1>{formatText(blok.heading)}</h1>}
+      </div>
+      <div className={uspGrid}>
+        {blok.usps.map((blok) => (
+          <StoryblokServerComponent blok={blok} key={blok._uid} />
+        ))}
+      </div>
     </Section>
   );
 }

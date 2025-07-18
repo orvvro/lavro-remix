@@ -6,10 +6,22 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-import { storyblokInit, apiPlugin } from "@storyblok/react";
+import {
+  storyblokInit,
+  apiPlugin,
+  type SbBlokData,
+  type ISbStoryData,
+} from "@storyblok/react";
 
 import type { Route } from "./+types/root";
 import getStoryblokComponents from "./lib/getStoryblokComponents";
+import { type LoaderFunctionArgs, useLoaderData } from "react-router";
+import getStory from "~/lib/getStory";
+import {
+  StoryblokServerComponent,
+  useStoryblokState,
+} from "@storyblok/react/ssr";
+import { CalDialogProvider } from "./components/DialogProvider";
 
 storyblokInit({
   accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
@@ -17,7 +29,22 @@ storyblokInit({
   components: getStoryblokComponents(),
 });
 
+interface Config extends ISbStoryData {
+  header: SbBlokData[];
+  footer: SbBlokData[];
+  dialog: SbBlokData[];
+  cookieBanner: SbBlokData[];
+}
+
+export async function loader({ context }: LoaderFunctionArgs) {
+  const data = await getStory("config", context);
+
+  return Response.json({ data });
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { data } = useLoaderData();
+  const content = useStoryblokState(data.story.content) as Config | null;
   return (
     <html lang="en">
       <head>
@@ -27,7 +54,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <CalDialogProvider>
+          <StoryblokServerComponent blok={content?.header[0]} />
+          {children}
+          <StoryblokServerComponent blok={content?.dialog[0]} />
+        </CalDialogProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
