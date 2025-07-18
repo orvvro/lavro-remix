@@ -7,16 +7,19 @@ import {
 import type { LoaderFunctionArgs } from "react-router";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
 import { getStoryFromCache } from "~/lib/storyblokCache";
+import { findAndFetchSvgs } from "~/lib/getRawSvg";
 
 export const loader = async ({ params, context }: LoaderFunctionArgs) => {
   const slug = params["*"] || "home";
   const env = context.cloudflare.env;
 
-  // 1. Try to get the story from the Cloudflare KV cache.
-  let data = await getStoryFromCache(slug, env);
-  // 2. If it's a cache miss, fetch from Storyblok and populate the cache.
+  let data;
+
+  if (env.ENVIRONMENT === "production") {
+    data = await getStoryFromCache(slug, env);
+  }
+
   if (!data) {
-    console.log(`KV Cache miss for "${slug}". Fetching from Storyblok...`);
     try {
       const sbParams: ISbStoriesParams = {
         version: env.ENVIRONMENT === "production" ? "published" : "draft",
@@ -50,6 +53,14 @@ export const loader = async ({ params, context }: LoaderFunctionArgs) => {
   if (!data) {
     throw new Response("Not Found", { status: 404 });
   }
+
+  console.log(data.story.content);
+  // In the loader of the route that renders this section, e.g., app/routes/$slug.tsx
+
+  // ... after you fetch your main story data from Storyblok ...
+
+  // Start the process from the root of your story content
+  await findAndFetchSvgs(data.story.content.body); // Adjust 'body' to your main bloks field
 
   return Response.json({ data });
 };

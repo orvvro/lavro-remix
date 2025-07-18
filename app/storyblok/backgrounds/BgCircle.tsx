@@ -1,16 +1,15 @@
 import { type SbBlokData } from "@storyblok/react";
 import { css, cx } from "@linaria/core";
-import { useEffect, useRef } from "react";
 
 type BgDottedBlok = SbBlokData & {
-  follow_mouse?: boolean;
-  xl?: boolean;
-  style?: string;
+  right?: boolean;
+  bottom?: boolean;
+  styles?: string;
 };
 
 const BgCircle = ({ blok }: { blok: BgDottedBlok }) => {
   return (
-    <div className={cx(wrapper, blok.position && right)}>
+    <div className={cx(wrapper, blok.right && right, blok.bottom && bottom)}>
       <div className={cx(ball, blok.styles && light)} />
     </div>
   );
@@ -21,11 +20,16 @@ export default BgCircle;
 const wrapper = css`
   position: absolute;
   right: 50%;
+  bottom: 25%;
   opacity: 0.5;
 `;
 
 const right = css`
   left: 50%;
+`;
+
+const bottom = css`
+  top: 25%;
 `;
 
 const ball = css`

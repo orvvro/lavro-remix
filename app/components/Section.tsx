@@ -29,4 +29,5 @@ export default function Section({
 
 const section = css`
   position: relative;
+  padding: var(--default-section-spacing) 0;
 `;

@@ -4,7 +4,7 @@ import { breakPoints } from "~/assets/globals";
 
 import { Image } from "cloudflare-image";
 
-interface ExpandingContainerBlok extends SbBlokData {
+export interface ExpandingContainerBlok extends SbBlokData {
   heading: string;
   description: string;
   image: {

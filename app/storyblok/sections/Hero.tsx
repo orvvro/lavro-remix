@@ -4,16 +4,21 @@ import Section from "~/components/Section";
 import { formatText } from "~/lib/formatText";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
 
-const Hero = ({ blok }: { blok: SbBlokData }) => (
+interface HeroBlok extends SbBlokData {
+  headline: string;
+  sub_headline: string;
+  options: SbBlokData[];
+}
+
+const Hero = ({ blok }: { blok: HeroBlok }) => (
   <Section blok={blok}>
     <div className={hero}>
       <h1>{formatText(blok.headline)}</h1>
       <p>{blok.sub_headline as string}</p>
       <div>
-        {Array.isArray(blok.options) &&
-          blok.options.map((blok: SbBlokData) => (
-            <StoryblokServerComponent blok={blok} key={blok._uid} />
-          ))}
+        {blok.options.map((blok: SbBlokData) => (
+          <StoryblokServerComponent blok={blok} key={blok._uid} />
+        ))}
       </div>
     </div>
   </Section>
@@ -22,8 +27,7 @@ const Hero = ({ blok }: { blok: SbBlokData }) => (
 export default Hero;
 
 const hero = css`
-  padding-top: 10rem;
-  padding-bottom: 8rem;
+  padding-top: 5rem;
   text-align: center;
   max-width: 42rem;
   margin: 0 auto;

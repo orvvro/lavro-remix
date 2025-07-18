@@ -3,11 +3,7 @@
  * @param text The input text that may contain **bold** markdown
  * @returns Text with markdown converted to HTML spans with "bold" class
  */
-export function formatText(text: any): React.ReactNode {
-  if (!text || typeof text !== "string") {
-    return text;
-  }
-
+export function formatText(text: string): React.ReactNode {
   // Convert the text to HTML with bold spans and preserved spaces
   const htmlContent = text
     // Replace spaces with &#32;

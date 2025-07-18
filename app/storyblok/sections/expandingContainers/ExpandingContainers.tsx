@@ -1,12 +1,26 @@
 import { type SbBlokData } from "@storyblok/react";
 import { css } from "@linaria/core";
 import Section from "~/components/Section";
-import { breakPoints } from "~/assets/globals";
+import { breakPoints, centeredHeading } from "~/assets/globals";
 import { useEffect, useRef } from "react";
-import { expandingContainer } from "./ExpandingContainer";
+import {
+  expandingContainer,
+  type ExpandingContainerBlok,
+} from "./ExpandingContainer";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
+import { formatText } from "~/lib/formatText";
 
-const ExpandingContainers = ({ blok }: { blok: SbBlokData }) => {
+interface ExpandingContainersBlok extends SbBlokData {
+  heading?: string;
+  sub_heading?: string;
+  expanding_containers: ExpandingContainerBlok[];
+  image: {
+    filename: string;
+    alt: string;
+  };
+}
+
+const ExpandingContainers = ({ blok }: { blok: ExpandingContainersBlok }) => {
   const section = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,19 +43,27 @@ const ExpandingContainers = ({ blok }: { blok: SbBlokData }) => {
   }, []);
 
   return (
-    <Section ref={section} blok={blok} className={expandingContainers}>
-      {Array.isArray(blok.expanding_containers) &&
-        blok.expanding_containers.map((blok) => {
-          return <StoryblokServerComponent blok={blok} key={blok._uid} />;
-        })}
+    <Section className={sectionStyles} ref={section} blok={blok}>
+      <div className={centeredHeading}>
+        {blok.heading && <h1>{formatText(blok.heading)}</h1>}
+        {blok.sub_heading && <p>{blok.sub_heading}</p>}
+      </div>
+      <div className={expandingContainers}>
+        {blok.expanding_containers.map((blok) => (
+          <StoryblokServerComponent blok={blok} key={blok._uid} />
+        ))}
+      </div>
     </Section>
   );
 };
 
 export default ExpandingContainers;
 
-const expandingContainers = css`
+const sectionStyles = css`
   max-width: var(--smaller-max-width);
+`;
+
+const expandingContainers = css`
   display: flex;
   gap: 16px;
 

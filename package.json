@@ -16,6 +16,7 @@
     "publish": true
   },
   "dependencies": {
+    "@handy-ones/handy-svg": "^1.0.2",
     "@linaria/core": "^6.3.0",
     "@linaria/react": "^6.3.0",
     "@storyblok/react": "^5.4.0",

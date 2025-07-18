@@ -70,7 +70,8 @@ export const globals = css`
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-x: clip;
     }
 
     img,
@@ -357,6 +358,16 @@ export const summary = css`
     [data-state="open"] &::before {
       transform: translate(-50%, -50%) rotate(180deg);
     }
+  }
+`;
+
+export const centeredHeading = css`
+  text-align: center;
+  h1 {
+    margin-bottom: 1rem;
+  }
+  p {
+    margin-bottom: 2rem;
   }
 `;
 
