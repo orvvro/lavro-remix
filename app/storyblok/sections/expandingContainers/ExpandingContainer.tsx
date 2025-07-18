@@ -1,7 +1,8 @@
 import { type SbBlokData, storyblokEditable } from "@storyblok/react";
 import { css } from "@linaria/core";
 import { breakPoints } from "~/assets/globals";
-import { Image } from "@unpic/react";
+
+import { Image } from "cloudflare-image";
 
 interface ExpandingContainerBlok extends SbBlokData {
   heading: string;
@@ -19,17 +20,7 @@ const ExpandingContainer = ({ blok }: { blok: ExpandingContainerBlok }) => (
       <p>{blok.description}</p>
     </div>
     <div className={image}>
-      <Image
-        src={blok.image.filename}
-        alt={blok.image.alt}
-        layout="fullWidth"
-        background="auto"
-        operations={{
-          storyblok: {
-            quality: 80,
-          },
-        }}
-      />
+      <Image src={blok.image.filename} alt={blok.image.alt} />
     </div>
   </div>
 );

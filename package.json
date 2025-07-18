@@ -21,6 +21,7 @@
     "@storyblok/react": "^5.4.0",
     "@unpic/react": "^1.0.1",
     "@wyw-in-js/babel-preset": "^0.7.0",
+    "cloudflare-image": "^1.0.5",
     "isbot": "5.1.26",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
