@@ -6,9 +6,6 @@ type CloudflareEnv = {
   // ... other env vars
 };
 
-/**
- * Fetches a story from Storyblok and updates the KV cache.
- */
 async function fetchAndCacheStory(slug: string, env: CloudflareEnv) {
   console.log(`Fetching and caching "${slug}" in Cloudflare KV...`);
   try {
@@ -18,8 +15,6 @@ async function fetchAndCacheStory(slug: string, env: CloudflareEnv) {
       sbParams
     );
     if (data) {
-      // Store the data in KV. It will be automatically stringified.
-      // Set an expiration time (e.g., 30 days) to keep the cache from growing indefinitely.
       await env.STORYBLOK_CACHE.put(slug, JSON.stringify(data), {
         expirationTtl: 2592000, // 30 days in seconds
       });
@@ -28,10 +23,6 @@ async function fetchAndCacheStory(slug: string, env: CloudflareEnv) {
     console.error(`Failed to fetch and cache story "${slug}"`, error);
   }
 }
-
-/**
- * The action for our webhook to update the cache.
- */
 
 type WebhookBody = {
   action: "published" | "unpublished";
@@ -63,9 +54,6 @@ export async function handleWebhook(request: Request, env: CloudflareEnv) {
   return { success: false, message: "No action taken." };
 }
 
-/**
- * Gets a story from the KV cache. This is what our loader will use.
- */
 export async function getStoryFromCache(
   slug: string,
   env: CloudflareEnv
