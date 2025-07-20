@@ -70,21 +70,23 @@ const dialogStyles = css`
   transform: translateY(-50%);
   margin: 0 auto;
   z-index: 90;
-  padding: var(--default-padding);
   width: min(63rem, 100%);
   & > div {
     position: relative;
-    max-height: 90vh;
+    max-height: 100vh;
     border-radius: 0.375rem;
     overflow: auto;
+    padding: var(--default-padding);
   }
 `;
 
 const closeDialog = css`
-  position: fixed;
-  top: 0rem;
-  right: 2rem;
+  position: absolute;
+  top: var(--default-padding);
+  right: var(--default-padding);
+
   z-index: 92;
+  padding: 1rem;
 
   .stop1,
   .stop2 {
@@ -98,6 +100,12 @@ const closeDialog = css`
 
   &:hover .stop2 {
     stop-color: var(--color-secondary);
+  }
+
+  @media screen and (min-width: 827px) {
+    padding: 0;
+    position: fixed;
+    top: -0.5rem;
   }
 `;
 

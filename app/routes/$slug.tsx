@@ -8,7 +8,14 @@ import { findAndFetchSvgs } from "~/lib/getRawSvg";
 import getStory from "~/lib/getStory";
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
-  const data = await getStory(params["*"] || "home", context);
+  const { "*": splat } = params;
+  const slug = splat || "home";
+
+  if (splat === "home") {
+    throw new Response("Not Found", { status: 404 });
+  }
+
+  const data = await getStory(slug, context);
 
   await findAndFetchSvgs(data.story.content.body);
 
