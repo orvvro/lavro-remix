@@ -10,7 +10,7 @@ import { centeredHeading } from "~/assets/globals";
 
 interface UspGridBlok extends SbBlokData {
   heading?: string;
-  usps: any[];
+  usps: SbBlokData[];
 }
 
 export default function UspGrid({ blok }: { blok: UspGridBlok }) {

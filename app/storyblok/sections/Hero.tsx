@@ -1,8 +1,8 @@
-import { StoryblokComponent, type SbBlokData } from "@storyblok/react";
 import { css } from "@linaria/core";
 import Section from "~/components/Section";
 import { formatText } from "~/lib/formatText";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
+import { type SbBlokData } from "@storyblok/react";
 
 interface HeroBlok extends SbBlokData {
   headline: string;
@@ -14,7 +14,7 @@ const Hero = ({ blok }: { blok: HeroBlok }) => (
   <Section blok={blok}>
     <div className={hero}>
       <h1>{formatText(blok.headline)}</h1>
-      <p>{blok.sub_headline as string}</p>
+      <p>{blok.sub_headline}</p>
       <div>
         {blok.options.map((blok: SbBlokData) => (
           <StoryblokServerComponent blok={blok} key={blok._uid} />

@@ -1,13 +1,14 @@
+import type { StoryblokClient } from "@storyblok/react";
 import languages from "./languages";
 
 export default async function getPathsAndLinks(
-  storyblokApi: any,
+  storyblokApi: StoryblokClient,
   version: "published" | "draft"
 ) {
   const links = await storyblokApi.getAll("cdn/links", {
     version,
   });
-  let paths: Array<{
+  const paths: Array<{
     props: {
       language: string;
       slug: string | undefined;
@@ -20,9 +21,9 @@ export default async function getPathsAndLinks(
     .forEach((link: { slug: string }) => {
       languages.forEach((language: string) => {
         //This slug will be used for fetching data from storyblok
-        let slug = link.slug === "home" ? undefined : link.slug;
+        const slug = link.slug === "home" ? undefined : link.slug;
         //This will be used for generating all the urls for astro
-        let full_url = language === "en" ? slug : `${language}/${slug ?? ""}`;
+        const full_url = language === "en" ? slug : `${language}/${slug ?? ""}`;
         //This will let us change the url for diffrent versions
         let langSwitch = {};
         languages.forEach((lang: string) => {

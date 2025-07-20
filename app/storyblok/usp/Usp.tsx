@@ -1,4 +1,4 @@
-import { css, cx } from "@linaria/core";
+import { css } from "@linaria/core";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { breakPoints } from "~/assets/globals";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";

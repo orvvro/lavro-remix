@@ -1,48 +1,54 @@
 import { getStoryblokApi, type ISbStoriesParams } from "@storyblok/react";
-
+import { data } from "react-router";
 import { getStoryFromCache } from "~/lib/storyblokCache";
+import { timeoutPromise } from "./timeoutPromise";
 
 export default async function getStory(slug: string, ctx: any) {
   const env = ctx.cloudflare.env;
-  let data;
+  let body;
 
-  if (env.ENVIRONMENT === "production") {
-    data = await getStoryFromCache(slug, env);
-  }
+  body = await getStoryFromCache(slug, env);
 
-  if (!data) {
+  if (!body) {
     try {
       const sbParams: ISbStoriesParams = {
         version: env.ENVIRONMENT === "production" ? "published" : "draft",
       };
-      const response = await getStoryblokApi().get(
-        `cdn/stories/${slug}`,
-        sbParams
+      const storyblokapi = getStoryblokApi();
+      console.log(`Fetching story "${slug}" from Storyblok API...`);
+      const response = await timeoutPromise(
+        storyblokapi.get(`cdn/stories/${slug}`, sbParams),
+        5000
       );
-      data = response.data;
 
-      if (data) {
+      console.log(`Story "${slug}" fetched successfully.`);
+
+      if (response) {
+        body = response.data;
+
         // Use `waitUntil` to not block the response to the user.
         ctx.cloudflare.ctx.waitUntil(
-          env.STORYBLOK_CACHE.put(slug, JSON.stringify(data), {
+          env.STORYBLOK_CACHE.put(slug, JSON.stringify(body), {
             expirationTtl: 2592000,
           })
         );
       }
-    } catch (apiError) {
+    } catch (apiError: any) {
       console.error(
         `Failed to fetch story "${slug}" from Storyblok.`,
         apiError
       );
-      throw new Response("Not Found", { status: 404 });
+      throw data(apiError.message || "Not found", {
+        status: apiError.status || 404,
+      });
     }
   } else {
     console.log(`KV Cache hit for "${slug}".`);
   }
 
-  if (!data) {
-    throw new Response("Not Found", { status: 404 });
+  if (!body) {
+    throw data("Not Found", { status: 404 });
   }
 
-  return data;
+  return body;
 }

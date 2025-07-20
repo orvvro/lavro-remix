@@ -45,15 +45,15 @@ export async function handleWebhook(request: Request, env: CloudflareEnv) {
     return { success: false, message: "Invalid request body." };
   }
   if (body.action === "published") {
-    // Re-fetch and update the cache for the specific story that was published.
+    console.log(`Updating KV cache for "${body.full_slug}"`);
     await fetchAndCacheStory(body.full_slug, env);
     return {
       success: true,
       message: `KV Cache updated for ${body.full_slug}. ${body.text}`,
     };
   }
-  // You could also handle 'unpublished' events by deleting the key
   if (body.action === "unpublished") {
+    console.log(`Deleting KV cache for "${body.full_slug}"`);
     await env.STORYBLOK_CACHE.delete(body.full_slug);
     return {
       success: true,
@@ -70,6 +70,5 @@ export async function getStoryFromCache(
   slug: string,
   env: CloudflareEnv
 ): Promise<any | null> {
-  // The 'json' type automatically parses the JSON string from KV.
   return await env.STORYBLOK_CACHE.get(slug, "json");
 }

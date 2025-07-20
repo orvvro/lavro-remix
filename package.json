@@ -18,6 +18,7 @@
   "dependencies": {
     "@ark-ui/react": "^5.17.0",
     "@calcom/embed-react": "^1.5.3",
+    "@cloudflare/vite-plugin": "^1.9.6",
     "@linaria/core": "^6.3.0",
     "@linaria/react": "^6.3.0",
     "@storyblok/react": "^5.4.0",
@@ -32,12 +33,12 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.27.1",
-    "@cloudflare/vite-plugin": "^1.9.6",
     "@react-router/dev": "7.6.3",
     "@types/node": "^24.0.14",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@wyw-in-js/vite": "^0.7.0",
+    "globals": "^16.3.0",
     "typescript": "5.8.3",
     "vite": "^6.0.0",
     "vite-tsconfig-paths": "5.1.4",

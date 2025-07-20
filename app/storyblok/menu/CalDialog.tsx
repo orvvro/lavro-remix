@@ -9,7 +9,7 @@ export default function CalDialog() {
   const { toggleDialog, isOpen } = useCalDialog();
 
   useEffect(() => {
-    (async function () {
+    void (async function () {
       const cal = await getCalApi({ namespace: "consulting-call" });
       cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
     })();
@@ -132,7 +132,6 @@ const animation = css`
   @keyframes fadeIn {
     from {
       opacity: 0;
-      visiblity: visible;
     }
     to {
       opacity: 1;
@@ -142,7 +141,6 @@ const animation = css`
   @keyframes fadeOut {
     to {
       opacity: 0;
-      visibility: hidden;
     }
   }
 `;

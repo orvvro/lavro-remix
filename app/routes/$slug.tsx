@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router";
-import type { LoaderFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs, data } from "react-router";
 import {
   StoryblokServerComponent,
   useStoryblokState,
@@ -11,22 +11,23 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   const { "*": splat } = params;
   const slug = splat || "home";
 
-  if (splat === "home") {
-    throw new Response("Not Found", { status: 404 });
+  if (splat === "home" || splat === "json/version" || splat === "json/list") {
+    console.log(`Ignoring non-page request: ${splat}`);
+    throw data("Record Not Found", { status: 404 });
   }
 
-  const data = await getStory(slug, context);
+  const body = await getStory(slug, context);
 
-  await findAndFetchSvgs(data.story.content.body);
+  await findAndFetchSvgs(body.story.content.body);
 
-  return Response.json({ data });
+  return Response.json({ body });
 }
 
 export default function Page() {
-  let { data } = useLoaderData();
+  let { body } = useLoaderData();
 
-  data = useStoryblokState(data.story);
+  body = useStoryblokState(body.story);
   // docs: https://www.storyblok.com/docs/packages/storyblok-react
 
-  return <StoryblokServerComponent blok={data.content} />;
+  return <StoryblokServerComponent blok={body.content} />;
 }

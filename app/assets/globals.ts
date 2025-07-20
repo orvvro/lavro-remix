@@ -12,7 +12,6 @@ export const globals = css`
   :global() {
     :root {
       color-scheme: dark;
-      color-scheme: only dark;
       --color-black: #0d0d0d;
       --color-primary: #82d6e3;
       --color-secondary: #1463f5;
@@ -73,6 +72,7 @@ export const globals = css`
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
       overflow-x: clip;
+      overflow-y: scroll;
     }
 
     img,

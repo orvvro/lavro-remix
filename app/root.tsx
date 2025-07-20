@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  data,
 } from "react-router";
 import {
   storyblokInit,
@@ -16,12 +17,12 @@ import {
 import type { Route } from "./+types/root";
 import getStoryblokComponents from "./lib/getStoryblokComponents";
 import { type LoaderFunctionArgs, useLoaderData } from "react-router";
-import getStory from "~/lib/getStory";
 import {
   StoryblokServerComponent,
   useStoryblokState,
 } from "@storyblok/react/ssr";
 import { CalDialogProvider } from "./components/DialogProvider";
+import { getGlobalConfig } from "~/lib/configCache";
 
 storyblokInit({
   accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
@@ -36,15 +37,14 @@ interface Config extends ISbStoryData {
   cookieBanner: SbBlokData[];
 }
 
-export async function loader({ context }: LoaderFunctionArgs) {
-  const data = await getStory("config", context);
-
-  return Response.json({ data });
+export async function loader({ context, request }: LoaderFunctionArgs) {
+  const config = await getGlobalConfig(context);
+  return Response.json({ config });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { data } = useLoaderData();
-  const content = useStoryblokState(data.story.content) as Config | null;
+  const { config } = useLoaderData();
+  const content = useStoryblokState(config.story.content) as Config | null;
   return (
     <html lang="en">
       <head>

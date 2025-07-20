@@ -21,7 +21,7 @@ export const findAndFetchSvgs = async (bloks: any[]) => {
       Array.isArray(value)
     );
     if (nestedBloks) {
-      await findAndFetchSvgs(nestedBloks as any[]);
+      await findAndFetchSvgs(nestedBloks);
     }
   }
 };

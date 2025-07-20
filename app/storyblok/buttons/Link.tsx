@@ -1,16 +1,25 @@
-import { StoryblokComponent, type SbBlokData } from "@storyblok/react";
-import { css, cx } from "@linaria/core";
+import { type SbBlokData } from "@storyblok/react";
+
 import { getStyles } from "./Button";
 import { Link as RouterLink } from "react-router";
 import handleUrl from "~/lib/handleUrl";
 
-const Link = ({ blok }: { blok: SbBlokData }) => {
+interface LinkBlok extends SbBlokData {
+  text: string;
+  link: {
+    url: string;
+    cached_url: string;
+  };
+  style?: string;
+}
+
+const Link = ({ blok }: { blok: LinkBlok }) => {
   return (
     <RouterLink
-      to={(blok.link as any).url || handleUrl((blok.link as any).cached_url)}
+      to={blok.link.url || handleUrl(blok.link.cached_url)}
       className={getStyles(blok.style as string)}
     >
-      {blok.text as string}
+      {blok.text}
     </RouterLink>
   );
 };

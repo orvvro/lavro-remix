@@ -2,10 +2,16 @@ import { StoryblokServerComponent } from "@storyblok/react/ssr";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { css, cx } from "@linaria/core";
 import { RemoveScroll } from "react-remove-scroll";
-import { useCalDialog } from "~/components/DialogProvider";
+
 interface NavigationBlok extends SbBlokData {
   logo: SbBlokData[];
-  menu: SbBlokData[];
+  menu: MenuItemBlok[];
+}
+
+interface MenuItemBlok extends SbBlokData {
+  link: {
+    cached_url: string;
+  };
 }
 
 export default function Navigation({ blok }: { blok: NavigationBlok }) {
@@ -17,7 +23,7 @@ export default function Navigation({ blok }: { blok: NavigationBlok }) {
       <div>
         <StoryblokServerComponent blok={blok.logo[0]} />
         <ul>
-          {blok.menu.map((link: any) => (
+          {blok.menu.map((link: MenuItemBlok) => (
             <li key={link._uid}>
               <StoryblokServerComponent blok={link} />
             </li>
