@@ -9,7 +9,6 @@ interface NavigationBlok extends SbBlokData {
 }
 
 export default function Navigation({ blok }: { blok: NavigationBlok }) {
-  const { toggleDialog, isOpen } = useCalDialog();
   return (
     <nav
       {...storyblokEditable(blok)}
@@ -23,9 +22,6 @@ export default function Navigation({ blok }: { blok: NavigationBlok }) {
               <StoryblokServerComponent blok={link} />
             </li>
           ))}
-          <li>
-            <button onClick={toggleDialog}>Open Dialog</button>
-          </li>
         </ul>
       </div>
     </nav>

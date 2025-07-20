@@ -1,10 +1,18 @@
 import { StoryblokComponent, type SbBlokData } from "@storyblok/react";
 import { css, cx } from "@linaria/core";
 import { gradientBorder } from "~/assets/globals";
+import { useCalDialog } from "~/components/DialogProvider";
 
 const Button = ({ blok }: { blok: SbBlokData }) => {
+  let buttonAction;
+  switch (blok.buttonAction) {
+    default:
+      const { toggleDialog } = useCalDialog();
+      buttonAction = toggleDialog;
+      break;
+  }
   return (
-    <button className={getStyles(blok.style as string)}>
+    <button onClick={buttonAction} className={getStyles(blok.style as string)}>
       {blok.buttonText as string}
     </button>
   );

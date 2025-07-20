@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@babel/preset-react": "^7.27.1",
-    "@cloudflare/vite-plugin": "1.7.5",
+    "@cloudflare/vite-plugin": "^1.9.6",
     "@react-router/dev": "7.6.3",
     "@types/node": "^24.0.14",
     "@types/react": "^19.0.0",

@@ -1,4 +1,4 @@
-import { css } from "@linaria/core";
+import { css, cx } from "@linaria/core";
 import { Dialog } from "@ark-ui/react/dialog";
 import { RemoveScroll } from "react-remove-scroll";
 import { useCalDialog } from "~/components/DialogProvider";
@@ -16,15 +16,16 @@ export default function CalDialog() {
   }, []);
 
   return (
-    <RemoveScroll enabled={isOpen}>
+    <RemoveScroll enabled={isOpen} className={animation}>
       <Dialog.Root
         open={isOpen}
         onOpenChange={toggleDialog}
         preventScroll={false}
-        closeOnEscape={true}
       >
         <Dialog.Backdrop className={backdrop} />
-        <Dialog.Positioner className={dialogStyles}>
+        <Dialog.Positioner
+          className={cx(dialogStyles, RemoveScroll.classNames.zeroRight)}
+        >
           <Dialog.Content>
             <Cal
               namespace="consulting-call"
@@ -64,8 +65,10 @@ export default function CalDialog() {
 const dialogStyles = css`
   position: fixed;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  margin: 0 auto;
   z-index: 90;
   padding: var(--default-padding);
   width: min(63rem, 100%);
@@ -107,4 +110,31 @@ const backdrop = css`
   z-index: 80;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(6px);
+`;
+
+const animation = css`
+  [data-state="closed"] {
+    animation: fadeOut 0.15s ease-out forwards;
+  }
+
+  [data-state="open"] {
+    animation: fadeIn 0.15s ease-in forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      visiblity: visible;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
 `;
