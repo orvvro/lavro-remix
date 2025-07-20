@@ -6,18 +6,18 @@ import {
 } from "@storyblok/react/ssr";
 import { findAndFetchSvgs } from "~/lib/getRawSvg";
 import getStory from "~/lib/getStory";
+import timeSomething from "~/lib/timingFunction";
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
+  const startTime = Date.now();
   const { "*": splat } = params;
   const slug = splat || "home";
 
   if (splat === "home" || splat === "json/version" || splat === "json/list") {
-    console.log(`Ignoring non-page request: ${splat}`);
     throw data("Record Not Found", { status: 404 });
   }
-
   const body = await getStory(slug, context);
-
+  timeSomething(startTime, `loader for slug "${slug}"`);
   await findAndFetchSvgs(body.story.content.body);
 
   return Response.json({ body });

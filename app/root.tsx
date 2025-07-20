@@ -37,7 +37,7 @@ interface Config extends ISbStoryData {
   cookieBanner: SbBlokData[];
 }
 
-export async function loader({ context, request }: LoaderFunctionArgs) {
+export async function loader({ context }: LoaderFunctionArgs) {
   const config = await getGlobalConfig(context);
   return Response.json({ config });
 }
