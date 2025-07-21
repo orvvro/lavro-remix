@@ -48,7 +48,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const locale = getLocaleFromRequest(request);
 
   context.locale = locale;
-
+  console.log(`Locale set to: ${locale}`);
   const config = await getStory(`${locale}/config`, context);
   return Response.json({ config, locale });
 }
