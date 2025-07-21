@@ -84,7 +84,7 @@ const dialogStyles = css`
 const closeDialog = css`
   position: absolute;
   top: var(--default-padding);
-  right: var(--default-padding);
+  left: calc(100vw - 2 * var(--default-padding));
 
   z-index: 92;
   padding: 1rem;

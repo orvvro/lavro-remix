@@ -29,7 +29,7 @@ export default function Step({
 const step = css`
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
 
   & > div {
     max-width: 20rem;

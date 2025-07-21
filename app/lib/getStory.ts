@@ -2,7 +2,7 @@ import { getStoryblokApi, type ISbStoriesParams } from "@storyblok/react";
 import { data } from "react-router";
 import { getStoryFromCache } from "~/lib/storyblokCache";
 import { timeoutPromise } from "./timeoutPromise";
-import { supportedLanguages, defaultLanguage } from "./getLocaleFromRequest";
+import { defaultLanguage, supportedLanguages } from "~/lib/i18n";
 
 export default async function getStory(slug: string, ctx: any) {
   const env = ctx.cloudflare.env;

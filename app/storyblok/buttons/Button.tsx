@@ -88,7 +88,20 @@ const defaultButton = css`
     }
   }
 `;
-const defaultLink = css``;
+const defaultLink = css`
+  color: inherit;
+  transition: color 0.3s;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
+  background-clip: text;
+
+  &:hover {
+    color: transparent;
+  }
+`;
 
 export const getStyles = (style: string) => {
   switch (style) {

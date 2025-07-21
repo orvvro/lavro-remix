@@ -1,5 +1,4 @@
-export const supportedLanguages = ["en", "de", "nl"];
-export const defaultLanguage = "en";
+import { supportedLanguages, defaultLanguage } from "./i18n";
 
 /**
  * Determines the locale from the request URL.

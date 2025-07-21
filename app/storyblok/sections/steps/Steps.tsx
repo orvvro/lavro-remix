@@ -30,9 +30,8 @@ export default function Steps({ blok }: { blok: StepsBlok }) {
 
 const steps = css`
   display: flex;
-  text-align: center;
   flex-direction: column;
   align-items: center;
-  gap: 96px;
+  gap: 6rem;
   overflow: hidden;
 `;

@@ -69,6 +69,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <StoryblokServerComponent blok={content?.header[0]} />
           {children}
           <StoryblokServerComponent blok={content?.dialog[0]} />
+          <StoryblokServerComponent blok={content?.footer[0]} />
         </CalDialogProvider>
         <ScrollRestoration />
         <Scripts />

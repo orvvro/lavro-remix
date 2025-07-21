@@ -52,6 +52,7 @@ export const globals = css`
       color: inherit;
       border: none;
       cursor: pointer;
+      padding: 0;
     }
 
     ul,
