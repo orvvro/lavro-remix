@@ -6,14 +6,15 @@ import wyw from "@wyw-in-js/vite";
 
 export default defineConfig({
   plugins: [
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
-    reactRouter(),
     tsconfigPaths(),
     wyw({
       include: ["**/*.{ts,tsx}"],
+      exclude: [/node_modules/, /\?__react-router-build-client-route$/],
       babelOptions: {
         presets: ["@babel/preset-typescript", "@babel/preset-react"],
       },
     }),
+    reactRouter(),
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
   ],
 });

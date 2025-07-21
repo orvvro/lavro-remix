@@ -35,6 +35,7 @@ export const expandingContainer = css`
   background-color: var(--color-black);
   contain: content;
   overflow: hidden;
+  flex-grow: 0;
   &:first-child {
     flex-grow: 1;
   }
