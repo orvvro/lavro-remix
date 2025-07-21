@@ -5,7 +5,7 @@ import { timeoutPromise } from "./timeoutPromise";
 
 export default async function getStory(slug: string, ctx: any) {
   const env = ctx.cloudflare.env;
-  slug = slug === ctx.locale ? "/home" : `/${slug}`;
+  slug = slug == "" || slug === ctx.locale ? "/home" : `/${slug}`;
   const full_slug = `${ctx.locale}${slug}`;
   let body;
 

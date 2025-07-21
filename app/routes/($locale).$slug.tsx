@@ -13,7 +13,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   console.log(params);
   const slug = params.slug || "";
   console.log(params);
-  console.log(`slug: ${slug}`);
+
   if (slug === "home" || slug === "json/version" || slug === "json/list") {
     throw data("Record Not Found", { status: 404 });
   }
