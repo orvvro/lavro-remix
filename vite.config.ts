@@ -16,4 +16,15 @@ export default defineConfig({
       },
     }),
   ],
+  ssr: {
+    noExternal: [
+      "@react-router/dev",
+      "@react-router/dev/routes",
+      "@react-router/dev/vite",
+      "@wyw-in-js/core",
+      "@wyw-in-js/react",
+      "@wyw-in-js/vite",
+      "@storyblok/react/ssr",
+    ],
+  },
 });
