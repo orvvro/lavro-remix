@@ -40,7 +40,10 @@ interface Config extends ISbStoryData {
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
   const locale = getLocaleFromRequest(request);
-
+  console.log(
+    "name of the cURRENT ENVIRONMENT: ",
+    context.cloudflare.env.ENVIRONMENT
+  );
   context.locale = locale;
 
   const config = await getGlobalConfig(context);
