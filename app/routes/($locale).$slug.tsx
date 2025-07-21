@@ -10,11 +10,11 @@ import timeSomething from "~/lib/timingFunction";
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
   const startTime = Date.now();
-  const { slug: splat } = params;
-  const slug = splat || "home";
+  console.log(params);
+  const slug = params.slug || "";
   console.log(params);
   console.log(`slug: ${slug}`);
-  if (splat === "home" || splat === "json/version" || splat === "json/list") {
+  if (slug === "home" || slug === "json/version" || slug === "json/list") {
     throw data("Record Not Found", { status: 404 });
   }
 
