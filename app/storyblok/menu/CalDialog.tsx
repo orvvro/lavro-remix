@@ -24,7 +24,7 @@ export default function CalDialog() {
       >
         <Dialog.Backdrop className={backdrop} />
         <Dialog.Positioner
-          className={cx(dialogStyles, RemoveScroll.classNames.zeroRight)}
+          className={cx(dialogStyles, RemoveScroll.classNames.fullWidth)}
         >
           <Dialog.Content>
             <Cal
@@ -70,12 +70,13 @@ const dialogStyles = css`
   transform: translateY(-50%);
   margin: 0 auto;
   z-index: 90;
-  width: min(63rem, 100%);
   & > div {
+    width: min(63rem, 100%);
     position: relative;
     max-height: 100vh;
     border-radius: 0.375rem;
     overflow: auto;
+    margin: 0 auto;
     padding: var(--default-padding);
   }
 `;
