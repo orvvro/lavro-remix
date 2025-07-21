@@ -480,3 +480,12 @@ export const swiper = css`
     }
   }
 `;
+
+export const errorStyles = css`
+  div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+`;

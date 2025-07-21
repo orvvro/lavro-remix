@@ -5,7 +5,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  data,
 } from "react-router";
 import {
   storyblokInit,
@@ -23,8 +22,8 @@ import {
 } from "@storyblok/react/ssr";
 import { CalDialogProvider } from "./components/DialogProvider";
 import { getGlobalConfig } from "~/lib/configCache";
-import getLocaleFromRequest from "~/lib/getLocaleFromRequest"; // Import the helper
-import { css } from "@linaria/core";
+import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
+import { errorStyles } from "~/assets/globals";
 
 storyblokInit({
   accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
@@ -43,7 +42,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const locale = getLocaleFromRequest(request);
 
   context.locale = locale;
-  console.log(`Locale set to: ${locale}`);
+
   const config = await getGlobalConfig(context);
   return Response.json({ config, locale });
 }
@@ -105,12 +104,3 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     </main>
   );
 }
-
-const errorStyles = css`
-  div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-`;
