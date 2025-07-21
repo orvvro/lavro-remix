@@ -13,7 +13,12 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   const { "*": splat } = params;
   const slug = splat || "";
 
-  if (slug === "home" || slug === "json/version" || slug === "json/list") {
+  if (
+    slug === "home" ||
+    slug === "config" ||
+    slug === "json/version" ||
+    slug === "json/list"
+  ) {
     throw data("Record Not Found", { status: 404 });
   }
 

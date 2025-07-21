@@ -48,7 +48,6 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const locale = getLocaleFromRequest(request);
 
   context.locale = locale;
-  console.log(`Locale set to: ${locale}`);
   const config = await getStory(`${locale}/config`, context);
   return Response.json({ config, locale });
 }
@@ -68,8 +67,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <CalDialogProvider>
           <StoryblokServerComponent blok={content?.header[0]} />
           {children}
-          <StoryblokServerComponent blok={content?.dialog[0]} />
           <StoryblokServerComponent blok={content?.footer[0]} />
+          <StoryblokServerComponent blok={content?.dialog[0]} />
         </CalDialogProvider>
         <ScrollRestoration />
         <Scripts />
