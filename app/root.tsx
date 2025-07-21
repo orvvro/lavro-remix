@@ -23,6 +23,8 @@ import {
 } from "@storyblok/react/ssr";
 import { CalDialogProvider } from "./components/DialogProvider";
 import { getGlobalConfig } from "~/lib/configCache";
+import getLocaleFromRequest from "~/lib/getLocaleFromRequest"; // Import the helper
+import { css } from "@linaria/core";
 
 storyblokInit({
   accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
@@ -37,16 +39,20 @@ interface Config extends ISbStoryData {
   cookieBanner: SbBlokData[];
 }
 
-export async function loader({ context }: LoaderFunctionArgs) {
+export async function loader({ context, request }: LoaderFunctionArgs) {
+  const locale = getLocaleFromRequest(request);
+
+  context.locale = locale;
+
   const config = await getGlobalConfig(context);
-  return Response.json({ config });
+  return Response.json({ config, locale });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { config } = useLoaderData();
+  const { config, locale } = useLoaderData();
   const content = useStoryblokState(config.story.content) as Config | null;
   return (
-    <html lang="en">
+    <html lang={locale || "en"}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -71,30 +77,40 @@ export default function App() {
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  let message = "Oops!";
+  let message: number | string = "Oops!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+    message = error.status || message;
+    details = error.data || error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
   }
 
+  console.log(error);
+
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
+    <main className={errorStyles}>
+      <div>
+        <h1>{message}</h1>
+        <p>{details}</p>
+        {stack && (
+          <pre>
+            <code>{stack}</code>
+          </pre>
+        )}
+      </div>
     </main>
   );
 }
+
+const errorStyles = css`
+  div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+`;

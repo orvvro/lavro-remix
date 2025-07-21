@@ -10,12 +10,14 @@ import timeSomething from "~/lib/timingFunction";
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
   const startTime = Date.now();
-  const { "*": splat } = params;
+  const { slug: splat } = params;
   const slug = splat || "home";
-
+  console.log(params);
+  console.log(`slug: ${slug}`);
   if (splat === "home" || splat === "json/version" || splat === "json/list") {
     throw data("Record Not Found", { status: 404 });
   }
+
   const body = await getStory(slug, context);
   timeSomething(startTime, `loader for slug "${slug}"`);
   await findAndFetchSvgs(body.story.content.body);

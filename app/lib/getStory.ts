@@ -5,9 +5,13 @@ import { timeoutPromise } from "./timeoutPromise";
 
 export default async function getStory(slug: string, ctx: any) {
   const env = ctx.cloudflare.env;
+  slug = slug === ctx.locale ? "" : `/${slug}`;
+  const full_slug = `${ctx.locale}${slug}`;
   let body;
 
-  body = await getStoryFromCache(slug, env);
+  if (env.ENVIRONMENT === "production") {
+    body = await getStoryFromCache(slug, env);
+  }
 
   if (!body) {
     try {
@@ -15,13 +19,13 @@ export default async function getStory(slug: string, ctx: any) {
         version: env.ENVIRONMENT === "production" ? "published" : "draft",
       };
       const storyblokapi = getStoryblokApi();
-      console.log(`Fetching story "${slug}" from Storyblok API...`);
+      console.log(`Fetching story "${full_slug}" from Storyblok API...`);
       const response = await timeoutPromise(
-        storyblokapi.get(`cdn/stories/${slug}`, sbParams),
+        storyblokapi.get(`cdn/stories/${full_slug}`, sbParams),
         5000
       );
 
-      console.log(`Story "${slug}" fetched successfully.`);
+      console.log(`Story "${full_slug}" fetched successfully.`);
 
       if (response) {
         body = response.data;
@@ -35,7 +39,7 @@ export default async function getStory(slug: string, ctx: any) {
       }
     } catch (apiError: any) {
       console.error(
-        `Failed to fetch story "${slug}" from Storyblok.`,
+        `Failed to fetch story "${full_slug}" from Storyblok.`,
         apiError
       );
       throw data(apiError.message || "Not found", {
