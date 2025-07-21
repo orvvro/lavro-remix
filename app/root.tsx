@@ -29,6 +29,7 @@ storyblokInit({
   accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
   use: [apiPlugin],
   components: getStoryblokComponents(),
+  bridge: import.meta.env.PROD ? false : true,
 });
 
 interface Config extends ISbStoryData {
@@ -40,10 +41,7 @@ interface Config extends ISbStoryData {
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
   const locale = getLocaleFromRequest(request);
-  console.log(
-    "name of the cURRENT ENVIRONMENT: ",
-    context.cloudflare.env.ENVIRONMENT
-  );
+  console.log("CHECK IF ENV EQUALS PRODUCTION: ", import.meta.env.PROD);
   context.locale = locale;
 
   const config = await getGlobalConfig(context);

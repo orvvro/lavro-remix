@@ -9,15 +9,16 @@ export default async function getStory(slug: string, ctx: any) {
   const full_slug = `${ctx.locale}${slug}`;
   let body;
 
-  if (env.ENVIRONMENT === "production") {
+  if (import.meta.env.PROD) {
     body = await getStoryFromCache(slug, env);
   }
 
   if (!body) {
     try {
       const sbParams: ISbStoriesParams = {
-        version: env.ENVIRONMENT === "production" ? "published" : "draft",
+        version: import.meta.env.PROD ? "published" : "draft",
       };
+
       const storyblokapi = getStoryblokApi();
       console.log(`Fetching story "${full_slug}" from Storyblok API...`);
       const response = await timeoutPromise(
