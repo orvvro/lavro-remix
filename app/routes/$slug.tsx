@@ -10,9 +10,8 @@ import timeSomething from "~/lib/timingFunction";
 
 export async function loader({ params, context }: LoaderFunctionArgs) {
   const startTime = Date.now();
-  console.log(params);
-  const slug = params.slug || "";
-  console.log(params);
+  const { "*": splat } = params;
+  const slug = splat || "";
 
   if (slug === "home" || slug === "json/version" || slug === "json/list") {
     throw data("Record Not Found", { status: 404 });

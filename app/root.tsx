@@ -21,15 +21,20 @@ import {
   useStoryblokState,
 } from "@storyblok/react/ssr";
 import { CalDialogProvider } from "./components/DialogProvider";
-import { getGlobalConfig } from "~/lib/configCache";
 import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
 import { errorStyles } from "~/assets/globals";
-
+import getStory from "~/lib/getStory";
 storyblokInit({
   accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
   use: [apiPlugin],
   components: getStoryblokComponents(),
   bridge: import.meta.env.PROD ? false : true,
+  apiOptions: {
+    cache: {
+      clear: "auto",
+      type: "none",
+    },
+  },
 });
 
 interface Config extends ISbStoryData {
@@ -41,10 +46,10 @@ interface Config extends ISbStoryData {
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
   const locale = getLocaleFromRequest(request);
-  console.log("CHECK IF ENV EQUALS PRODUCTION: ", import.meta.env.PROD);
+
   context.locale = locale;
 
-  const config = await getGlobalConfig(context);
+  const config = await getStory(`${locale}/config`, context);
   return Response.json({ config, locale });
 }
 

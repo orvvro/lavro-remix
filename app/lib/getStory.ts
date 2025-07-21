@@ -2,15 +2,35 @@ import { getStoryblokApi, type ISbStoriesParams } from "@storyblok/react";
 import { data } from "react-router";
 import { getStoryFromCache } from "~/lib/storyblokCache";
 import { timeoutPromise } from "./timeoutPromise";
+import { supportedLanguages, defaultLanguage } from "./getLocaleFromRequest";
 
 export default async function getStory(slug: string, ctx: any) {
   const env = ctx.cloudflare.env;
-  slug = slug == "" || slug === ctx.locale ? "/home" : `/${slug}`;
-  const full_slug = `${ctx.locale}${slug}`;
   let body;
 
+  slug = slug.replace(/\/$/, "");
+
+  let fullSlug: string;
+
+  // Case 1: The slug is an empty string, meaning it's the default homepage.
+  if (slug === "") {
+    fullSlug = `${defaultLanguage}/home`;
+  }
+  // Case 2: The slug is just a language code (e.g., "nl"), meaning it's a translated homepage.
+  else if (supportedLanguages.includes(slug) && !slug.includes("/")) {
+    fullSlug = `${slug}/home`;
+  }
+  // Case 3: The slug does not contain a language prefix, so it belongs to the default language.
+  else if (!supportedLanguages.includes(slug.split("/")[0])) {
+    fullSlug = `${defaultLanguage}/${slug}`;
+  }
+  // Case 4: The slug is already correctly formatted with a language prefix (e.g., "nl/about").
+  else {
+    fullSlug = slug;
+  }
+
   if (import.meta.env.PROD) {
-    body = await getStoryFromCache(slug, env);
+    body = await getStoryFromCache(fullSlug, env);
   }
 
   if (!body) {
@@ -20,13 +40,12 @@ export default async function getStory(slug: string, ctx: any) {
       };
 
       const storyblokapi = getStoryblokApi();
-      console.log(`Fetching story "${full_slug}" from Storyblok API...`);
+      console.log(`Fetching story "${fullSlug}" from Storyblok API...`);
       const response = await timeoutPromise(
-        storyblokapi.get(`cdn/stories/${full_slug}`, sbParams),
-        5000
+        storyblokapi.get(`cdn/stories/${fullSlug}`, sbParams)
       );
 
-      console.log(`Story "${full_slug}" fetched successfully.`);
+      console.log(`Story "${fullSlug}" fetched successfully.`);
 
       if (response) {
         body = response.data;
@@ -40,7 +59,7 @@ export default async function getStory(slug: string, ctx: any) {
       }
     } catch (apiError: any) {
       console.error(
-        `Failed to fetch story "${full_slug}" from Storyblok.`,
+        `Failed to fetch story "${fullSlug}" from Storyblok.`,
         apiError
       );
       throw data(apiError.message || "Not found", {
