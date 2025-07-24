@@ -14,7 +14,7 @@ export default function Footer({
     <footer {...storyblokEditable(blok)} className={footerStyles}>
       <div className={cx(defaultSpacing, container)}>
         {blok.footer_menu.map((blok) => (
-          <StoryblokServerComponent blok={blok} />
+          <StoryblokServerComponent blok={blok} key={blok._uid} />
         ))}
       </div>
     </footer>

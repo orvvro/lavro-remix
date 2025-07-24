@@ -1,6 +1,7 @@
 import { css } from "@linaria/core";
 import { type SbBlokData } from "@storyblok/react";
 import { StoryblokServerRichText } from "@storyblok/react/ssr";
+import Section from "~/components/Section";
 
 export default function RichText({
   blok,
@@ -10,7 +11,11 @@ export default function RichText({
     text: any;
   };
 }) {
-  return <StoryblokServerRichText doc={blok.text} />;
+  return (
+    <Section className={richTextStyles} blok={blok}>
+      <StoryblokServerRichText doc={blok.text} />
+    </Section>
+  );
 }
 
 const richTextStyles = css`

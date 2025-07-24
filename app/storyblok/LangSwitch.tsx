@@ -29,7 +29,7 @@ export default function LangSwitch({ blok }: { blok: SbBlokData }) {
         aria-expanded={isOpen}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span>{currentLocale}</span>
+        {currentLocale}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="15"
@@ -83,6 +83,7 @@ const langSwitchStyles = css`
   }
 
   button {
+    font-weight: normal;
     display: flex;
     gap: 0.3rem;
     align-items: center;

@@ -21,6 +21,7 @@
     "@cloudflare/vite-plugin": "^1.9.6",
     "@linaria/core": "^6.3.0",
     "@linaria/react": "^6.3.0",
+    "@peterek/vite-plugin-favicons": "^2.1.0",
     "@storyblok/react": "^5.4.0",
     "@unpic/react": "^1.0.1",
     "@wyw-in-js/babel-preset": "^0.7.0",

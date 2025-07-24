@@ -49,6 +49,9 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
 
   context.locale = locale;
   const config = await getStory(`${locale}/config`, context);
+  if (!config) {
+    throw new Response("Config not found", { status: 404 });
+  }
   return Response.json({ config, locale });
 }
 
@@ -58,10 +61,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang={locale || "en"}>
       <head>
+        <script src="https://www.lavro-marketing.com/i.js" />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="preconnect" href="https://app.cal.com" />
         <Meta />
         <Links />
+        {/*<!-- FAVICONS -->*/}
       </head>
       <body>
         <CalDialogProvider>
@@ -69,6 +75,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
           <StoryblokServerComponent blok={content?.footer[0]} />
           <StoryblokServerComponent blok={content?.dialog[0]} />
+          <StoryblokServerComponent blok={content?.cookieBanner[0]} />
         </CalDialogProvider>
         <ScrollRestoration />
         <Scripts />

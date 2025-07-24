@@ -14,7 +14,7 @@ export default function FooterMenu({
     <div {...storyblokEditable(blok)} className={footerMenuStyles}>
       {blok.heading && <span>{blok.heading}</span>}
       {blok.items.map((blok) => (
-        <StoryblokServerComponent blok={blok} />
+        <StoryblokServerComponent blok={blok} key={blok._uid} />
       ))}
     </div>
   );
@@ -26,6 +26,6 @@ const footerMenuStyles = css`
   gap: 0.5rem;
   align-items: flex-start;
   span {
-    font-weight: 500;
+    font-weight: 600;
   }
 `;

@@ -4,8 +4,10 @@ import { RemoveScroll } from "react-remove-scroll";
 import { useCalDialog } from "~/components/DialogProvider";
 import Cal, { getCalApi } from "@calcom/embed-react";
 import { useEffect } from "react";
+import { useRouteLoaderData } from "react-router";
 
 export default function CalDialog() {
+  const { locale } = useRouteLoaderData("root");
   const { toggleDialog, isOpen } = useCalDialog();
 
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function CalDialog() {
               calLink="lavro/consulting-call"
               config={{ layout: "month_view", theme: "dark" }}
               style={{ width: "100%", height: "100%" }}
+              lang={locale}
             />
             <Dialog.CloseTrigger className={closeDialog}>
               <svg
@@ -84,7 +87,8 @@ const dialogStyles = css`
 const closeDialog = css`
   position: absolute;
   top: var(--default-padding);
-  left: calc(100vw - 2 * var(--default-padding));
+  left: calc(100vw - var(--default-padding));
+  transform: translateX(-100%);
 
   z-index: 92;
   padding: 1rem;

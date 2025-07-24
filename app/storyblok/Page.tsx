@@ -2,12 +2,21 @@ import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
 import { css } from "@linaria/core";
 
-const Page = ({ blok }: { blok: SbBlokData }) => (
+const Page = ({
+  blok,
+}: {
+  blok: SbBlokData & {
+    body: SbBlokData[];
+    title: string;
+    description: string;
+  };
+}) => (
   <main className={pageStyles} {...storyblokEditable(blok)} key={blok._uid}>
-    {Array.isArray(blok?.body) &&
-      blok.body.map((nestedBlok: SbBlokData) => (
-        <StoryblokServerComponent blok={nestedBlok} key={nestedBlok._uid} />
-      ))}
+    <meta name="description" content={blok.description} />
+    <title>{blok.title}</title>
+    {blok.body.map((nestedBlok: SbBlokData) => (
+      <StoryblokServerComponent blok={nestedBlok} key={nestedBlok._uid} />
+    ))}
   </main>
 );
 
