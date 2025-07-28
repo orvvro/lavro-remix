@@ -17,6 +17,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     slug === "home" ||
     slug === "config" ||
     slug === "json/version" ||
+    slug === "favicon.ico" ||
     slug === "json/list"
   ) {
     throw data("Record Not Found", { status: 404 });

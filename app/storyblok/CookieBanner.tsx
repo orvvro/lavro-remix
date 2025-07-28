@@ -17,17 +17,17 @@ export default function CookieBanner({
       <span>{blok.title}</span>
       <div className={descriptionStyles}>
         {blok.description?.map((blok) => {
-          return <StoryblokServerComponent blok={blok} />;
+          return <StoryblokServerComponent blok={blok} key={blok._uid} />;
         })}
       </div>
       <div>
         {blok.purposes?.map((blok) => {
-          return <StoryblokServerComponent blok={blok} />;
+          return <StoryblokServerComponent blok={blok} key={blok._uid} />;
         })}
       </div>
       <div className={buttonsStyles}>
         {blok.buttons.map((blok) => {
-          return <StoryblokServerComponent blok={blok} />;
+          return <StoryblokServerComponent blok={blok} key={blok._uid} />;
         })}
       </div>
     </div>

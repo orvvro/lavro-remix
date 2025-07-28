@@ -6,6 +6,9 @@ import { cloudflare } from "@cloudflare/vite-plugin";
 import favicons from "@peterek/vite-plugin-favicons";
 
 export default defineConfig({
+  server: {
+    allowedHosts: ["localhost", "dev.lavro-marketing.com"],
+  },
   plugins: [
     favicons("app/assets/favicon.svg"),
     tsconfigPaths(),

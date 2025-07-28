@@ -48,10 +48,9 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const locale = getLocaleFromRequest(request);
 
   context.locale = locale;
+
   const config = await getStory(`${locale}/config`, context);
-  if (!config) {
-    throw new Response("Config not found", { status: 404 });
-  }
+  console.log("Config loaded: ", config);
   return Response.json({ config, locale });
 }
 
@@ -61,7 +60,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang={locale || "en"}>
       <head>
-        <script src="https://www.lavro-marketing.com/i.js" />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://app.cal.com" />

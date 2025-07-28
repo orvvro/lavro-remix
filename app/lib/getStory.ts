@@ -41,15 +41,20 @@ export default async function getStory(slug: string, ctx: any) {
 
       const storyblokapi = getStoryblokApi();
       console.log(`Fetching story "${fullSlug}" from Storyblok API...`);
-      const response = await timeoutPromise(
-        storyblokapi.get(`cdn/stories/${fullSlug}`, sbParams)
+      /*       const response = await timeoutPromise(
+        storyblokapi.get(`cdn/stories/${fullSlug}`, sbParams),
+        30000
+      ); */
+      const response = await storyblokapi.get(
+        `cdn/stories/${fullSlug}`,
+        sbParams
       );
 
       console.log(`Story "${fullSlug}" fetched successfully.`);
+      console.log(`Response:`, response);
+      body = response.data;
 
-      if (response) {
-        body = response.data;
-
+      if (response && import.meta.env.PROD) {
         // Use `waitUntil` to not block the response to the user.
         ctx.cloudflare.ctx.waitUntil(
           env.STORYBLOK_CACHE.put(slug, JSON.stringify(body), {
