@@ -14,7 +14,8 @@
   "kv_namespaces": [
     {
       "binding": "STORYBLOK_CACHE",
-      "id": "3832d68a54dc495582a95f64593d29ac"
+      "id": "3832d68a54dc495582a95f64593d29ac",
+      "preview_id": "37c4e5b7e2e74753ad5504ef04755fa8"
     }
   ]
 }

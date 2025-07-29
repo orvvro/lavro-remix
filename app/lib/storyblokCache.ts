@@ -58,5 +58,5 @@ export async function getStoryFromCache(
   slug: string,
   env: CloudflareEnv
 ): Promise<any | null> {
-  return await env.STORYBLOK_CACHE.get(slug, "json");
+  return await env.STORYBLOK_CACHE.get(slug);
 }

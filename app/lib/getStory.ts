@@ -34,33 +34,33 @@ export default async function getStory(slug: string, ctx: any) {
     fullSlug = slug;
   }
 
-  console.log(`Fetching story from KV for slug: "${fullSlug}"`);
-  body = await getStoryFromCache(fullSlug, env);
-  console.log(`Story for slug: "${fullSlug}" fetched successfully from KV.`);
-  if (!body) {
+  const cachedBody = await getStoryFromCache(fullSlug, env);
+
+  if (cachedBody) {
+    // 2. If a value exists, THEN parse it.
+    console.log(`KV Cache hit for "${fullSlug}".`);
+    body = JSON.parse(cachedBody);
+  } else {
+    // 3. If the cache is empty, fetch from the API.
+    console.log(`KV Cache miss for "${fullSlug}". Fetching from API...`);
     try {
       const sbParams: ISbStoriesParams = {
         version: import.meta.env.PROD ? "published" : "draft",
       };
 
       const storyblokapi = getStoryblokApi();
-      console.log(`Fetching story "${fullSlug}" from Storyblok API...`);
-      /*       const response = await timeoutPromise(
-        storyblokapi.get(`cdn/stories/${fullSlug}`, sbParams),
-        30000
-      ); */
       const response = await storyblokapi.get(
         `cdn/stories/${fullSlug}`,
         sbParams
       );
 
-      console.log(`Story "${fullSlug}" fetched successfully.`);
+      console.log(`Story "${fullSlug}" fetched successfully from API.`);
       body = response.data;
 
       if (response && import.meta.env.PROD) {
-        // Use `waitUntil` to not block the response to the user.
         ctx.cloudflare.ctx.waitUntil(
-          env.STORYBLOK_CACHE.put(slug, JSON.stringify(body), {
+          env.STORYBLOK_CACHE.put(fullSlug, JSON.stringify(body), {
+            // Use fullSlug here
             expirationTtl: 2592000,
           })
         );
@@ -74,8 +74,6 @@ export default async function getStory(slug: string, ctx: any) {
         status: apiError.status || 404,
       });
     }
-  } else {
-    console.log(`KV Cache hit for "${slug}".`);
   }
 
   if (!body) {
