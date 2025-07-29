@@ -1,12 +1,12 @@
-import { getStoryblokApi, type ISbStoriesParams } from "@storyblok/react";
+import { type ISbStoriesParams } from "@storyblok/react";
 import { data } from "react-router";
 import { getStoryFromCache } from "~/lib/storyblokCache";
-import { timeoutPromise } from "./timeoutPromise";
 import { defaultLanguage, supportedLanguages } from "~/lib/i18n";
+import { useStoryblokApi } from "@storyblok/react/ssr";
 
 export default async function getStory(slug: string, ctx: any) {
   const env = ctx.cloudflare.env;
-  let body;
+  let body, cachedBody;
   console.log(`getStory for slug: "${slug}"`);
   slug = slug.replace(/\/$/, "");
 
@@ -34,8 +34,12 @@ export default async function getStory(slug: string, ctx: any) {
     fullSlug = slug;
   }
 
-  const cachedBody = await getStoryFromCache(fullSlug, env);
-
+  const token = "xIPKdLuDyHrVplJXGlkvBgtt"; // Your public Storyblok token
+  const version = import.meta.env.PROD ? "published" : "draft";
+  const url = `https://api.storyblok.com/v2/cdn/stories/${fullSlug}?version=${version}&token=${token}&cv=${Date.now()}`;
+  if (import.meta.env.PROD) {
+    cachedBody = await getStoryFromCache(fullSlug, env);
+  }
   if (cachedBody) {
     // 2. If a value exists, THEN parse it.
     console.log(`KV Cache hit for "${fullSlug}".`);
@@ -44,27 +48,26 @@ export default async function getStory(slug: string, ctx: any) {
     // 3. If the cache is empty, fetch from the API.
     console.log(`KV Cache miss for "${fullSlug}". Fetching from API...`);
     try {
-      const sbParams: ISbStoriesParams = {
-        version: import.meta.env.PROD ? "published" : "draft",
-      };
+      const response = await fetch(url);
+      if (!response.ok) {
+        // If the fetch fails, throw an error to stop the process
+        throw new Error(`Storyblok API responded with ${response.status}`);
+      }
 
-      const storyblokapi = getStoryblokApi();
-      const response = await storyblokapi.get(
-        `cdn/stories/${fullSlug}`,
-        sbParams
-      );
+      const bodyText = await response.text();
 
       console.log(`Story "${fullSlug}" fetched successfully from API.`);
-      body = response.data;
 
       if (response && import.meta.env.PROD) {
         ctx.cloudflare.ctx.waitUntil(
-          env.STORYBLOK_CACHE.put(fullSlug, JSON.stringify(body), {
+          env.STORYBLOK_CACHE.put(fullSlug, bodyText, {
             // Use fullSlug here
             expirationTtl: 2592000,
           })
         );
       }
+
+      body = JSON.parse(bodyText);
     } catch (apiError: any) {
       console.error(
         `Failed to fetch story "${fullSlug}" from Storyblok.`,

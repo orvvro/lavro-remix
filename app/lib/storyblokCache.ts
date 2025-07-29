@@ -1,4 +1,5 @@
-import { getStoryblokApi, type ISbStoriesParams } from "@storyblok/react";
+import { type ISbStoriesParams } from "@storyblok/react";
+import { useStoryblokApi } from "@storyblok/react/ssr";
 
 // Define a type for the Cloudflare environment for clarity
 type CloudflareEnv = {
@@ -10,7 +11,7 @@ async function fetchAndCacheStory(slug: string, env: CloudflareEnv) {
   console.log(`Fetching and caching "${slug}" in Cloudflare KV...`);
   try {
     const sbParams: ISbStoriesParams = { version: "published" };
-    const { data } = await getStoryblokApi().get(
+    const { data } = await useStoryblokApi().get(
       `cdn/stories/${slug}`,
       sbParams
     );

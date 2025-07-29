@@ -5,6 +5,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  data,
 } from "react-router";
 import {
   storyblokInit,
@@ -51,15 +52,20 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   context.locale = locale;
 
   const config = await getStory(`${locale}/config`, context);
-  console.log("Config loaded!");
+  if (!config) {
+    throw data(`Terrible server error`, { status: 500 });
+  }
+
   return Response.json({ config, locale });
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const { config, locale } = useLoaderData();
-  const content = useStoryblokState(config.story.content) as Config | null;
+  const loaderData = useLoaderData();
+  const content = useStoryblokState(
+    loaderData.config.story.content
+  ) as Config | null;
   return (
-    <html lang={locale || "en"}>
+    <html lang={loaderData.locale || "en"}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

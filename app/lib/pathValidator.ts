@@ -1,4 +1,4 @@
-import { useStoryblokApi } from "@storyblok/react";
+import { useStoryblokApi } from "@storyblok/react/ssr";
 import getPathsAndLinks from "./getLinksAndPaths";
 
 const CACHE_KEY = "valid_storyblok_paths_i18n";

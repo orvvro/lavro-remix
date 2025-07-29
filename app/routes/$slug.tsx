@@ -25,6 +25,9 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 
   const body = await getStory(slug, context);
   timeSomething(startTime, `loader for slug "${slug}"`);
+  if (!body || !body.story) {
+    throw data(`Record "${slug}" Not Found`, { status: 404 });
+  }
   await findAndFetchSvgs(body.story.content.body);
 
   return Response.json({ body });
