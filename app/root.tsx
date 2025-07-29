@@ -24,6 +24,7 @@ import { CalDialogProvider } from "./components/DialogProvider";
 import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
 import { errorStyles } from "~/assets/globals";
 import getStory from "~/lib/getStory";
+
 storyblokInit({
   accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
   use: [apiPlugin],
@@ -50,7 +51,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   context.locale = locale;
 
   const config = await getStory(`${locale}/config`, context);
-  console.log("Config loaded: ", config);
+  console.log("Config loaded!");
   return Response.json({ config, locale });
 }
 
@@ -65,7 +66,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <link rel="preconnect" href="https://app.cal.com" />
         <Meta />
         <Links />
-        {/*<!-- FAVICONS -->*/}
       </head>
       <body>
         <CalDialogProvider>
@@ -73,7 +73,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
           <StoryblokServerComponent blok={content?.footer[0]} />
           <StoryblokServerComponent blok={content?.dialog[0]} />
-          <StoryblokServerComponent blok={content?.cookieBanner[0]} />
+          {/*           <StoryblokServerComponent blok={content?.cookieBanner[0]} />
+           */}{" "}
         </CalDialogProvider>
         <ScrollRestoration />
         <Scripts />
@@ -99,7 +100,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     stack = error.stack;
   }
 
-  console.log(error);
+  console.log("Error boundary hit!\n", error);
 
   return (
     <main className={errorStyles}>

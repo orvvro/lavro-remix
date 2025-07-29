@@ -20,7 +20,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     slug === "favicon.ico" ||
     slug === "json/list"
   ) {
-    throw data("Record Not Found", { status: 404 });
+    throw data(`Record "${slug}" Not Found`, { status: 404 });
   }
 
   const body = await getStory(slug, context);

@@ -7,8 +7,13 @@ import { defaultLanguage, supportedLanguages } from "~/lib/i18n";
 export default async function getStory(slug: string, ctx: any) {
   const env = ctx.cloudflare.env;
   let body;
-
+  console.log(`getStory for slug: "${slug}"`);
   slug = slug.replace(/\/$/, "");
+
+  const invalidPrefixRegex = new RegExp(`^${defaultLanguage}(/.*)?$`);
+  if (invalidPrefixRegex.test(slug) && slug !== `${defaultLanguage}/config`) {
+    throw data("Not Found", { status: 404 });
+  }
 
   let fullSlug: string;
 
@@ -29,10 +34,9 @@ export default async function getStory(slug: string, ctx: any) {
     fullSlug = slug;
   }
 
-  if (import.meta.env.PROD) {
-    body = await getStoryFromCache(fullSlug, env);
-  }
-
+  console.log(`Fetching story from KV for slug: "${fullSlug}"`);
+  body = await getStoryFromCache(fullSlug, env);
+  console.log(`Story for slug: "${fullSlug}" fetched successfully from KV.`);
   if (!body) {
     try {
       const sbParams: ISbStoriesParams = {
@@ -51,7 +55,6 @@ export default async function getStory(slug: string, ctx: any) {
       );
 
       console.log(`Story "${fullSlug}" fetched successfully.`);
-      console.log(`Response:`, response);
       body = response.data;
 
       if (response && import.meta.env.PROD) {
