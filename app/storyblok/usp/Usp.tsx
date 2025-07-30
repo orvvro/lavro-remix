@@ -40,7 +40,7 @@ export const uspContainer = css`
       border-box;
   border: 2px solid transparent;
   border-radius: 20px;
-  padding: 28px 32px;
+  padding: 2em;
   contain: content;
   isolation: isolate;
 
@@ -57,7 +57,6 @@ export const uspContainer = css`
   h2 {
     margin-top: 20px;
     margin-bottom: 8px;
-    font-size: 20px;
   }
 
   p {

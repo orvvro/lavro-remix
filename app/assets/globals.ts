@@ -12,11 +12,19 @@ export const globals = css`
   :global() {
     :root {
       color-scheme: dark;
+      --step--2: clamp(0.6944rem, 0.6593rem + 0.1759vw, 0.8rem);
+      --step--1: clamp(0.8333rem, 0.7778rem + 0.2778vw, 1rem);
+      --step-0: clamp(1rem, 0.9167rem + 0.4167vw, 1.25rem);
+      --step-1: clamp(1.2rem, 1.0792rem + 0.6042vw, 1.5625rem);
+      --step-2: clamp(1.44rem, 1.269rem + 0.8552vw, 1.9531rem);
+      --step-3: clamp(1.728rem, 1.4902rem + 1.189vw, 2.4414rem);
+      --step-4: clamp(2.0736rem, 1.7475rem + 1.6303vw, 3.0518rem);
+      --step-5: clamp(2.4883rem, 2.0462rem + 2.2106vw, 3.8147rem);
       --color-black: #0d0d0d;
       --color-primary: #82d6e3;
       --color-secondary: #1463f5;
       --default-padding: clamp(0.5rem, -0.3333rem + 4.1667vw, 3rem);
-      --default-max-width: 1440px;
+      --default-max-width: 1280px;
       --smaller-max-width: 1024px;
       --default-section-spacing: 96px;
       --list-spacing: clamp(0.875rem, 0.3967rem + 2.3913vw, 2.25rem);
@@ -67,7 +75,7 @@ export const globals = css`
     }
 
     body {
-      line-height: calc(1em + 0.5rem);
+      font-size: var(--step-0);
       display: flex;
       flex-direction: column;
       -webkit-font-smoothing: antialiased;
@@ -135,7 +143,7 @@ export const globals = css`
 
     h1,
     h2 {
-      font-size: 2.5rem;
+      font-size: var(--step-4);
       font-weight: 600;
       line-height: 1.2;
 
@@ -152,7 +160,7 @@ export const globals = css`
     }
 
     h2 {
-      font-size: 1.5rem;
+      font-size: var(--step-2);
     }
 
     article {

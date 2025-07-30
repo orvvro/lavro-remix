@@ -10,7 +10,7 @@ type BgDottedBlok = SbBlokData & {
 const BgCircle = ({ blok }: { blok: BgDottedBlok }) => {
   return (
     <div className={wrapper}>
-      <div className={cx(mask, blok.style && "square")}>
+      <div className={cx(mask, blok.style)}>
         <div />
       </div>
     </div>
@@ -21,7 +21,6 @@ export default BgCircle;
 
 const mask = css`
   height: 100%;
-  mask-image: radial-gradient(ellipse at center, black, transparent 60%);
 
   & > div {
     height: 100%;
@@ -37,6 +36,17 @@ const mask = css`
         #fff var(--tile-size)
       );
     background-size: var(--bg-size) var(--bg-size);
+  }
+
+  &.ellipse {
+    mask-image: radial-gradient(ellipse at center, black, transparent 60%);
+  }
+
+  &.fade-left {
+    height: 200%;
+    mask-image: linear-gradient(90deg, transparent, black),
+      linear-gradient(0deg, transparent, black 90%);
+    mask-composite: intersect;
   }
 
   &.square {

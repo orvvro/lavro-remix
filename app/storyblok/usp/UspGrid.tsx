@@ -4,13 +4,14 @@ import Section from "~/components/Section";
 import { useRef, useEffect } from "react";
 import { uspContainer } from "./Usp";
 import { breakPoints } from "~/assets/globals";
-import { css } from "@linaria/core";
+import { css, cx } from "@linaria/core";
 import { formatText } from "~/lib/formatText";
 import { centeredHeading } from "~/assets/globals";
 
 interface UspGridBlok extends SbBlokData {
   heading?: string;
   usps: SbBlokData[];
+  style: string;
 }
 
 export default function UspGrid({ blok }: { blok: UspGridBlok }) {
@@ -52,7 +53,7 @@ export default function UspGrid({ blok }: { blok: UspGridBlok }) {
       <div className={centeredHeading}>
         {blok.heading && <h1>{formatText(blok.heading)}</h1>}
       </div>
-      <div className={uspGrid}>
+      <div className={cx(uspGrid, blok.style)}>
         {blok.usps.map((blok) => (
           <StoryblokServerComponent blok={blok} key={blok._uid} />
         ))}
@@ -65,14 +66,16 @@ const uspGrid = css`
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: 1fr;
-  gap: 32px;
+  gap: 2em;
   isolation: isolate;
 
-  @media (min-width: 640px) {
+  @media (min-width: ${breakPoints.mobile}rem) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
+  @media (min-width: ${breakPoints.desktop}rem) {
+    &.six {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 `;
