@@ -14,8 +14,8 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   const slug = splat || "";
 
   if (
-    slug === "home" ||
-    slug === "config" ||
+    slug.endsWith("home") ||
+    slug.endsWith("config") ||
     slug === "json/version" ||
     slug === "favicon.ico" ||
     slug === "json/list"
