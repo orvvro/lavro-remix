@@ -26,7 +26,7 @@ import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
 import { errorStyles } from "~/assets/globals";
 import getStory from "~/lib/getStory";
 
-console.log(import.meta);
+console.log("THIS IS THE IMPORT.META OF THE APP: ", import.meta);
 
 storyblokInit({
   accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
