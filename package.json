@@ -45,10 +45,12 @@
     "wrangler": "4.21.x"
   },
   "scripts": {
-    "build": "react-router build",
+    "build:production": "react-router build",
+    "build:preview": "react-router build --mode preview",
     "cf-typegen": "wrangler types && react-router typegen",
     "check": "tsc && react-router build && wrangler deploy --dry-run",
-    "deploy": "wrangler deploy",
+    "deploy:production": "wrangler deploy",
+    "deploy:preview": "wrangler deploy --mode preview",
     "dev": "react-router dev",
     "wrangler-dev": "wrangler dev --remote",
     "preview": "npm run build && vite preview",

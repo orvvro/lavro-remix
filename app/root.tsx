@@ -26,6 +26,21 @@ import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
 import { errorStyles } from "~/assets/globals";
 import getStory from "~/lib/getStory";
 
+console.log(import.meta);
+
+storyblokInit({
+  accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
+  use: [apiPlugin],
+  components: getStoryblokComponents(),
+  bridge: import.meta.env.PROD ? false : true,
+  apiOptions: {
+    cache: {
+      clear: "auto",
+      type: "none",
+    },
+  },
+});
+
 interface Config extends ISbStoryData {
   header: SbBlokData[];
   footer: SbBlokData[];
@@ -34,21 +49,8 @@ interface Config extends ISbStoryData {
 }
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
-  storyblokInit({
-    accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
-    use: [apiPlugin],
-    components: getStoryblokComponents(),
-    bridge: import.meta.env.PROD && !context.isPreview ? false : true,
-    apiOptions: {
-      cache: {
-        clear: "auto",
-        type: "none",
-      },
-    },
-  });
-
   const locale = getLocaleFromRequest(request);
-
+  console.log("CONTEXT", context);
   context.locale = locale;
 
   const config = await getStory(`${locale}/config`, context);
