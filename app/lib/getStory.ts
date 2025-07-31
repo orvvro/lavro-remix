@@ -35,10 +35,9 @@ export default async function getStory(slug: string, ctx: any) {
   }
 
   const token = "xIPKdLuDyHrVplJXGlkvBgtt"; // Your public Storyblok token
-  const version =
-    import.meta.env.PROD && !ctx.isPreview ? "published" : "draft";
+  const version = ctx.isProduction ? "published" : "draft";
   const url = `https://api.storyblok.com/v2/cdn/stories/${fullSlug}?version=${version}&token=${token}&cv=${Date.now()}`;
-  if (import.meta.env.PROD) {
+  if (ctx.isProduction) {
     cachedBody = await getStoryFromCache(fullSlug, env);
   }
   if (cachedBody) {
