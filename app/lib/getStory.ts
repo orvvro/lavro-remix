@@ -1,6 +1,7 @@
 import { data } from "react-router";
 import { getStoryFromCache } from "~/lib/storyblokCache";
 import { defaultLanguage, supportedLanguages } from "~/lib/i18n";
+import { accessToken } from "~/root";
 
 export default async function getStory(slug: string, ctx: any) {
   const env = ctx.cloudflare.env;
@@ -9,7 +10,11 @@ export default async function getStory(slug: string, ctx: any) {
   slug = slug.replace(/\/$/, "");
 
   const invalidPrefixRegex = new RegExp(`^${defaultLanguage}(/.*)?$`);
-  if (invalidPrefixRegex.test(slug) && slug !== `${defaultLanguage}/config`) {
+  if (
+    invalidPrefixRegex.test(slug) &&
+    slug !== `${defaultLanguage}/config` &&
+    !ctx.isPreview
+  ) {
     throw data("Not Found", { status: 404 });
   }
 
@@ -32,9 +37,8 @@ export default async function getStory(slug: string, ctx: any) {
     fullSlug = slug;
   }
 
-  const token = "xIPKdLuDyHrVplJXGlkvBgtt"; // Your public Storyblok token
   const version = ctx.isProduction ? "published" : "draft";
-  const url = `https://api.storyblok.com/v2/cdn/stories/${fullSlug}?version=${version}&token=${token}&cv=${Date.now()}`;
+  const url = `https://api.storyblok.com/v2/cdn/stories/${fullSlug}?version=${version}&token=${accessToken}&cv=${Date.now()}`;
   if (ctx.isProduction) {
     cachedBody = await getStoryFromCache(fullSlug, env);
   }

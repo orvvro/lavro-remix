@@ -25,9 +25,9 @@ import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
 import { errorStyles } from "~/assets/globals";
 import getStory from "~/lib/getStory";
 
-export const isProduction: boolean =
+const isProduction: boolean =
   import.meta.env.PROD && import.meta.env.MODE === "production";
-
+const isPreview: boolean = import.meta.env.MODE === "preview";
 export const accessToken = "xIPKdLuDyHrVplJXGlkvBgtt";
 
 storyblokInit({
@@ -54,6 +54,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   const locale = getLocaleFromRequest(request);
   context.locale = locale;
   context.isProduction = isProduction;
+  context.isPreview = isPreview;
 
   const config = await getStory(`${locale}/config`, context);
 
