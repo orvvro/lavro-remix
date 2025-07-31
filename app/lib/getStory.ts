@@ -24,14 +24,17 @@ export default async function getStory(slug: string, ctx: any) {
   if (slug === "") {
     fullSlug = `${defaultLanguage}/home`;
   }
+
   // Case 2: The slug is just a language code (e.g., "nl"), meaning it's a translated homepage.
   else if (supportedLanguages.includes(slug) && !slug.includes("/")) {
     fullSlug = `${slug}/home`;
   }
+
   // Case 3: The slug does not contain a language prefix, so it belongs to the default language.
   else if (!supportedLanguages.includes(slug.split("/")[0])) {
     fullSlug = `${defaultLanguage}/${slug}`;
   }
+
   // Case 4: The slug is already correctly formatted with a language prefix (e.g., "nl/about").
   else {
     fullSlug = slug;
@@ -42,6 +45,7 @@ export default async function getStory(slug: string, ctx: any) {
   if (ctx.isProduction) {
     cachedBody = await getStoryFromCache(fullSlug, env);
   }
+
   if (cachedBody) {
     // 2. If a value exists, THEN parse it.
     console.log(`KV Cache hit for "${fullSlug}".`);
