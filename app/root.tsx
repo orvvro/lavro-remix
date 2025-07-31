@@ -50,8 +50,8 @@ interface Config extends ISbStoryData {
 
 export async function loader({ context, request }: LoaderFunctionArgs) {
   const locale = getLocaleFromRequest(request);
-  console.log("CONTEXT", context);
   context.locale = locale;
+  console.log("THIS IS THE BASE URL: ", import.meta.env.BASE_URL);
 
   const config = await getStory(`${locale}/config`, context);
   if (!config) {
