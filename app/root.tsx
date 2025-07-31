@@ -5,7 +5,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  data,
 } from "react-router";
 import {
   storyblokInit,
@@ -26,11 +25,13 @@ import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
 import { errorStyles } from "~/assets/globals";
 import getStory from "~/lib/getStory";
 
-const isProduction: boolean =
+export const isProduction: boolean =
   import.meta.env.PROD && import.meta.env.MODE === "production";
 
+export const accessToken = "xIPKdLuDyHrVplJXGlkvBgtt";
+
 storyblokInit({
-  accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
+  accessToken,
   use: [apiPlugin],
   components: getStoryblokComponents(),
   bridge: !isProduction,
@@ -55,9 +56,6 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   context.isProduction = isProduction;
 
   const config = await getStory(`${locale}/config`, context);
-  if (!config) {
-    throw data(`Terrible server error`, { status: 500 });
-  }
 
   return Response.json({ config, locale });
 }
@@ -82,8 +80,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
           {children}
           <StoryblokServerComponent blok={content?.footer[0]} />
           <StoryblokServerComponent blok={content?.dialog[0]} />
-          {/*           <StoryblokServerComponent blok={content?.cookieBanner[0]} />
-           */}
         </CalDialogProvider>
         <ScrollRestoration />
         <Scripts />
