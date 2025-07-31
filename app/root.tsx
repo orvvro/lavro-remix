@@ -26,13 +26,14 @@ import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
 import { errorStyles } from "~/assets/globals";
 import getStory from "~/lib/getStory";
 
-console.log("THIS IS THE IMPORT.META OF THE APP: ", import.meta);
-
 storyblokInit({
   accessToken: "xIPKdLuDyHrVplJXGlkvBgtt",
   use: [apiPlugin],
   components: getStoryblokComponents(),
-  bridge: import.meta.env.PROD ? false : true,
+  bridge:
+    import.meta.env.PROD && import.meta.env.MODE === "production"
+      ? false
+      : true,
   apiOptions: {
     cache: {
       clear: "auto",
@@ -51,7 +52,7 @@ interface Config extends ISbStoryData {
 export async function loader({ context, request }: LoaderFunctionArgs) {
   const locale = getLocaleFromRequest(request);
   context.locale = locale;
-  console.log("THIS IS THE BASE URL: ", import.meta.env.BASE_URL);
+  console.log("THIS IS IMPORT.META: ", import.meta);
 
   const config = await getStory(`${locale}/config`, context);
   if (!config) {
