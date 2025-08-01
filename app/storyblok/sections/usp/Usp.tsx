@@ -74,32 +74,20 @@ export const uspContainer = css`
     stop-color: var(--color-secondary);
   }
 
-  @property --color-1 {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: white;
-  }
-
-  @property --color-2 {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: white;
-  }
-
   h2 {
+    margin: 1rem 0 0.5rem;
     display: inline-block;
-    transition: 0.2s ease-in-out;
-    color: transparent;
-    transition-property: --color-1, --color-2;
-    margin-top: 20px;
-    margin-bottom: 8px;
+    color: inherit;
+    transition: color 0.3s;
+    background-image: linear-gradient(
+      90deg,
+      var(--color-primary),
+      var(--color-secondary)
+    );
     background-clip: text;
-
-    background-image: linear-gradient(90deg, var(--color-1), var(--color-2));
   }
 
   &:hover h2 {
-    --color-1: var(--color-primary);
-    --color-2: var(--color-secondary);
+    color: transparent;
   }
 `;

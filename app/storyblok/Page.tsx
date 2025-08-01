@@ -1,6 +1,5 @@
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
-import { css } from "@linaria/core";
 
 export default function Page({
   blok,
@@ -12,7 +11,7 @@ export default function Page({
   };
 }) {
   return (
-    <main className={pageStyles} {...storyblokEditable(blok)} key={blok._uid}>
+    <main {...storyblokEditable(blok)} key={blok._uid}>
       <meta name="description" content={blok.description} />
       <title>{blok.title}</title>
       {blok.body.map((nestedBlok: SbBlokData) => (
@@ -21,7 +20,3 @@ export default function Page({
     </main>
   );
 }
-
-const pageStyles = css`
-  overflow-x: hidden;
-`;

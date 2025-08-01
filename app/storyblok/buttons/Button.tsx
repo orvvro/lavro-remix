@@ -109,12 +109,26 @@ const defaultLink = css`
   }
 `;
 
+const highlightLink = css`
+  color: inherit;
+  color: transparent;
+  transition: color 0.3s;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
+  background-clip: text;
+`;
+
 export const getStyles = (style: string) => {
   switch (style) {
     case "button--gradient":
       return cx(gradientButton, gradientBorder);
     case "button--default":
       return cx(defaultButton, gradientBorder);
+    case "highlight--link":
+      return highlightLink;
     default:
       return defaultLink;
   }

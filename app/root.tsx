@@ -78,6 +78,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <CalDialogProvider>
           <StoryblokServerComponent blok={content?.header[0]} />
+
           {children}
           <StoryblokServerComponent blok={content?.footer[0]} />
           <StoryblokServerComponent blok={content?.dialog[0]} />
