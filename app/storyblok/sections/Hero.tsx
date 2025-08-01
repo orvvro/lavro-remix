@@ -3,6 +3,7 @@ import Section from "~/components/Section";
 import { formatText } from "~/lib/formatText";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
 import { type SbBlokData } from "@storyblok/react";
+import SplitText from "~/components/SplitText";
 
 interface HeroBlok extends SbBlokData {
   headline: string;
@@ -14,7 +15,9 @@ interface HeroBlok extends SbBlokData {
 const Hero = ({ blok }: { blok: HeroBlok }) => (
   <Section blok={blok}>
     <div className={cx(hero, blok.style)}>
-      <h1>{formatText(blok.headline)}</h1>
+      <SplitText>
+        <h1>{blok.headline}</h1>
+      </SplitText>
       <p>{blok.sub_headline}</p>
       <div>
         {blok.options?.map((blok: SbBlokData) => (

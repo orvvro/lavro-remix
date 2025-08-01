@@ -28,6 +28,7 @@ export const globals = css`
       --smaller-max-width: 1024px;
       --default-section-spacing: 96px;
       --list-spacing: clamp(0.875rem, 0.3967rem + 2.3913vw, 2.25rem);
+      overflow-x: hidden;
     }
 
     @font-face {
@@ -147,6 +148,7 @@ export const globals = css`
       font-weight: 600;
       line-height: 1.2;
 
+      .hi,
       strong {
         font-weight: inherit;
         color: transparent;
