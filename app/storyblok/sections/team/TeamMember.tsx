@@ -15,10 +15,17 @@ export default function TeamMember({
   };
 }) {
   return (
-    <div {...storyblokEditable(blok)}>
+    <div {...storyblokEditable(blok)} className={teamMemberStyles}>
+      <Image src={blok.image.filename} alt={blok.image.alt} />
       <h3>{blok.name}</h3>
       <p>{blok.position}</p>
-      {blok.image && <Image src={blok.image.filename} alt={blok.image.alt} />}
     </div>
   );
 }
+
+const teamMemberStyles = css`
+  img {
+    border-radius: 10px;
+    margin-bottom: 0.5em;
+  }
+`;

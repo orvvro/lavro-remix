@@ -40,12 +40,12 @@ const navigationStyles = css`
   left: 0;
   right: 0;
   z-index: 50;
-  padding: 0 0.5rem;
+  margin: 0 auto;
+  max-width: var(--default-max-width);
+  padding: 0 var(--default-padding);
   & > div {
     position: relative;
-    max-width: var(--smaller-max-width);
     display: flex;
-    margin: 0 auto;
     align-items: center;
     justify-content: space-between;
     padding: 1rem;

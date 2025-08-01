@@ -43,7 +43,7 @@ const mask = css`
   }
 
   &.fade-left {
-    height: 200%;
+    height: 150%;
     mask-image: linear-gradient(90deg, transparent, black),
       linear-gradient(0deg, transparent, black 90%);
     mask-composite: intersect;
