@@ -127,7 +127,7 @@ export const getStyles = (style: string) => {
       return cx(gradientButton, gradientBorder);
     case "button--default":
       return cx(defaultButton, gradientBorder);
-    case "highlight--link":
+    case "link--highlight":
       return highlightLink;
     default:
       return defaultLink;
