@@ -6,13 +6,15 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+
 import {
   storyblokInit,
   apiPlugin,
   type SbBlokData,
   type ISbStoryData,
 } from "@storyblok/react";
-
+import PoppinsSemiBold from "~/assets/fonts/poppins-semibold-webfont.woff2";
+import PoppinsRegular from "~/assets/fonts/poppins-regular-webfont.woff2";
 import type { Route } from "./+types/root";
 import getStoryblokComponents from "./lib/getStoryblokComponents";
 import { type LoaderFunctionArgs, useLoaderData } from "react-router";
@@ -55,7 +57,12 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   context.locale = locale;
   context.isProduction = isProduction;
   context.isPreview = isPreview;
-
+  console.log(
+    "PRODUCTION: ",
+    context.isProduction,
+    " PREVIEW: ",
+    context.isPreview
+  );
   const config = await getStory(`${locale}/config`, context);
 
   return Response.json({ config, locale });
@@ -72,15 +79,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://app.cal.com" />
+        <link
+          rel="preload"
+          href={PoppinsSemiBold}
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href={PoppinsRegular}
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <Meta />
         <Links />
       </head>
       <body>
         <CalDialogProvider>
-          <StoryblokServerComponent blok={content?.header[0]} />
+          <div style={{ overflowX: "hidden" }}>
+            <StoryblokServerComponent blok={content?.header[0]} />
 
-          {children}
-          <StoryblokServerComponent blok={content?.footer[0]} />
+            {children}
+            <StoryblokServerComponent blok={content?.footer[0]} />
+          </div>
           <StoryblokServerComponent blok={content?.dialog[0]} />
         </CalDialogProvider>
         <ScrollRestoration />

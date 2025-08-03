@@ -1,75 +1,89 @@
-import { css } from "@linaria/core";
-import { animate, stagger } from "motion";
-import { splitText } from "motion-plus";
-import { useEffect, useRef } from "react";
+import { css, cx } from "@linaria/core";
+import { type RefObject, useRef, Fragment } from "react";
+import { useSplitTextAnimation } from "~/hooks/useSplitTextAnimation";
+
+interface SplitTextProps {
+  children: string;
+  as?: "h1" | "h2" | "p"; // Allow rendering as different elements
+}
 
 export default function SplitText({
   children,
-}: {
-  children?: React.ReactNode;
-}) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  as: Tag = "h1",
+}: SplitTextProps) {
+  const ref = useRef<null | HTMLHeadingElement | HTMLParagraphElement>(null);
 
-  useEffect(() => {
-    document.fonts.ready.then(() => {
-      if (!containerRef.current) return;
+  // This client-side hook will apply the animation after the component mounts.
+  useSplitTextAnimation(ref as RefObject<HTMLElement>);
 
-      const targetElement = containerRef.current.querySelector("h1");
-      if (!targetElement) return;
-
-      // 1. Get the original text with markdown and identify bold words.
-      const originalText = targetElement.textContent || "";
-      const boldWords = (originalText.match(/\*\*(.*?)\*\*/g) || []).map(
-        (word) => word.slice(2, -2)
-      );
-
-      // 2. Create a clean version of the text for splitText to process.
-      const cleanText = originalText.replace(/\*\*/g, "");
-      targetElement.textContent = cleanText;
-
-      // Hide the container until the fonts are loaded and text is processed
-      containerRef.current!.style.visibility = "visible";
-
-      // 3. Run splitText on the clean text.
-      const { words } = splitText(targetElement);
-
-      // 4. Apply bold styling to the marked words.
-      words.forEach((wordSpan) => {
-        if (boldWords.includes(wordSpan.textContent || "")) {
-          wordSpan.classList.add("hi");
-        }
-      });
-
-      // 5. Animate the words in the h1.
-      animate(
-        words,
-        { opacity: [0, 1], y: [20, 0] },
-        {
-          type: "spring",
-          duration: 1.3,
-          delay: stagger(0.05),
-        }
-      );
+  // 1. PARSE: The same logic as before, but done on the server.
+  const segments = children
+    .split(/(\|.*?\|)/g)
+    .filter(Boolean)
+    .map((part) => {
+      const isBold = part.startsWith("|") && part.endsWith("|");
+      return {
+        text: isBold ? part.slice(1, -1) : part,
+        isBold,
+      };
     });
-  }, []);
 
   return (
-    <div className={splitTextStyles} ref={containerRef}>
-      {children}
+    <div className={splitTextStyles}>
+      <Tag ref={ref} aria-label={children}>
+        {segments.map((segment, segmentIndex) => (
+          // We use a React.Fragment because a segment can contain multiple words
+          // and we don't want an extra wrapper around them.
+          <Fragment key={segmentIndex}>
+            {segment.text.split(" ").map((word, wordIndex, wordsArray) => (
+              // 2. RENDER WORDS: Each word gets its own span for line breaking.
+              <span
+                key={wordIndex}
+                className={cx(segment.isBold && highlightStyles, "w")}
+              >
+                {/* 3. RENDER CHARACTERS: Each character gets a span for animation. */}
+                {word.split("").map((char, charIndex) => (
+                  <span key={charIndex} className="c">
+                    {char}
+                  </span>
+                ))}
+                {/* Add a space after each word, but not the last one in a segment */}
+                {wordIndex < wordsArray.length - 1 ? "\u00A0" : ""}
+              </span>
+            ))}
+          </Fragment>
+        ))}
+      </Tag>
     </div>
   );
 }
 
 const splitTextStyles = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 420px;
-  text-align: left;
-  visibility: hidden;
+  h1,
+  h2,
+  p {
+    display: flex;
+    flex-wrap: wrap;
+    visibility: hidden; /* Hide until animation starts */
+  }
 
-  .split-word {
-    will-change: transform, opacity;
+  .w {
+    display: inline-block;
+  }
+
+  .c {
+    display: inline-block;
+    will-change: transform, opacity, filter;
+  }
+`;
+
+export const highlightStyles = css`
+  .c {
+    color: transparent;
+    background-image: linear-gradient(
+      var(--color-primary),
+      var(--color-secondary)
+    );
+    background-clip: text;
   }
 `;
