@@ -26,6 +26,8 @@
     "@wyw-in-js/babel-preset": "^0.7.0",
     "cloudflare-image": "^1.0.5",
     "isbot": "5.1.26",
+    "motion": "^12.23.12",
+    "motion-plus": "^1.5.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-remove-scroll": "^2.7.1",

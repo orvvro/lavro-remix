@@ -1,5 +1,6 @@
 import { css } from "@linaria/core";
-
+import PoppinsSemiBold from "~/assets/fonts/poppins-semibold-webfont.woff2";
+import PoppinsRegular from "~/assets/fonts/poppins-regular-webfont.woff2";
 export const breakPoints = {
   mobilexs: 25,
   mobile: 40,
@@ -33,15 +34,22 @@ export const globals = css`
     @font-face {
       font-family: "Poppins";
       font-weight: 400;
-      src: local("Poppins"),
-        url("./fonts/poppins-regular-webfont.woff2") format("woff2");
+      src: local("Poppins"), url(${PoppinsRegular}) format("woff2");
     }
 
     @font-face {
       font-family: "Poppins";
       font-weight: 600;
-      src: local("Poppins"),
-        url("./fonts/poppins-semibold-webfont.woff2") format("woff2");
+      src: local("Poppins"), url(${PoppinsSemiBold}) format("woff2");
+    }
+
+    @font-face {
+      font-family: "Adjusted Arial Fallback";
+      src: local(Arial);
+      size-adjust: 109%;
+      ascent-override: 99%;
+      descent-override: 38%;
+      line-gap-override: normal;
     }
 
     *,
@@ -129,7 +137,7 @@ export const globals = css`
     }
 
     body {
-      font-family: "Poppins", sans-serif;
+      font-family: "Poppins", "Adjusted Arial Fallback", sans-serif;
       color: white;
       background-color: var(--color-black);
       min-height: 100vh;
