@@ -95,6 +95,8 @@ const defaultButton = css`
   }
 `;
 const defaultLink = css`
+  padding: 0 0.8rem;
+  margin: 0 -0.8rem;
   color: inherit;
   transition: color 0.3s;
   background-image: linear-gradient(

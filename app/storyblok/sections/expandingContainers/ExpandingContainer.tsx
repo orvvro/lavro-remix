@@ -20,7 +20,7 @@ const ExpandingContainer = ({ blok }: { blok: ExpandingContainerBlok }) => (
       <p>{blok.description}</p>
     </div>
     <div className={image}>
-      <Image src={blok.image.filename} alt={blok.image.alt} />
+      <Image src={blok.image.filename} alt={blok.image.alt} draggable={false} />
     </div>
   </div>
 );

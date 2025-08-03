@@ -6,7 +6,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-
 import {
   storyblokInit,
   apiPlugin,
@@ -26,11 +25,12 @@ import { CalDialogProvider } from "./components/DialogProvider";
 import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
 import { errorStyles } from "~/assets/globals";
 import getStory from "~/lib/getStory";
-
+import CustomCursor from "~/components/CustomCursor";
 const isProduction: boolean =
   import.meta.env.PROD && import.meta.env.MODE === "production";
 const isPreview: boolean = import.meta.env.MODE === "preview";
 export const accessToken = "xIPKdLuDyHrVplJXGlkvBgtt";
+import { bodyWrapperStyles } from "~/assets/globals";
 
 storyblokInit({
   accessToken,
@@ -98,13 +98,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <CalDialogProvider>
-          <div style={{ overflowX: "hidden" }}>
+          <div className={bodyWrapperStyles}>
             <StoryblokServerComponent blok={content?.header[0]} />
 
             {children}
             <StoryblokServerComponent blok={content?.footer[0]} />
           </div>
           <StoryblokServerComponent blok={content?.dialog[0]} />
+          <CustomCursor />
         </CalDialogProvider>
         <ScrollRestoration />
         <Scripts />

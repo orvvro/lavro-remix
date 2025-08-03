@@ -81,6 +81,7 @@ const dialogStyles = css`
     overflow: auto;
     margin: 0 auto;
     padding: var(--default-padding);
+    scrollbar-width: none;
   }
 `;
 

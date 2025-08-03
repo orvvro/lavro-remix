@@ -31,6 +31,10 @@ export const globals = css`
       --list-spacing: clamp(0.875rem, 0.3967rem + 2.3913vw, 2.25rem);
     }
 
+    ::selection {
+      background-color: #82d6e358;
+    }
+
     @font-face {
       font-family: "Poppins";
       font-weight: 400;
@@ -84,12 +88,7 @@ export const globals = css`
 
     body {
       font-size: var(--step-0);
-      display: flex;
-      flex-direction: column;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-      overflow-x: clip;
-      overflow-y: scroll;
     }
 
     img,
@@ -159,7 +158,6 @@ export const globals = css`
         font-weight: inherit;
         color: transparent;
         background-image: linear-gradient(
-          90deg,
           var(--color-primary),
           var(--color-secondary)
         );
@@ -206,7 +204,6 @@ export const defaultSpacing = css`
 export const ctaButton = css`
   display: block;
   text-align: center;
-  font-family: "Inter", sans-serif;
   font-weight: bold;
   color: black;
   position: relative;
@@ -240,6 +237,17 @@ export const ctaButton = css`
     right: 0;
     bottom: 0;
     border-radius: 77px;
+  }
+`;
+
+export const bodyWrapperStyles = css`
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  min-height: 100vh;
+
+  & > main {
+    flex: 1;
   }
 `;
 
