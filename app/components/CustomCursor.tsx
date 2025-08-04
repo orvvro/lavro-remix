@@ -19,7 +19,7 @@ export default function CustomCursor() {
   return (
     <>
       {!isOpen && (
-        <Cursor variants={variants} magnetic={{ snap: 0.6 }}>
+        <Cursor variants={variants} magnetic>
           {zone === "card" ? (
             <p className={textStyles}>Click to see more</p>
           ) : null}
