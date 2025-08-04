@@ -2,20 +2,20 @@ import { css } from "@linaria/core";
 import { Cursor, useCursorState } from "motion-plus/react";
 import { useCalDialog } from "~/components/DialogProvider";
 
-const variants = {
-  default: {
-    color: "black",
-    backgroundColor: "white",
-    borderRadius: 200,
-  },
-  pointer: {
-    opacity: 0.1,
-  },
-};
-
 export default function CustomCursor() {
   const { isOpen } = useCalDialog();
   const { zone } = useCursorState();
+
+  const variants = {
+    default: {
+      color: "black",
+      backgroundColor: "white",
+      borderRadius: 200,
+    },
+    pointer: {
+      opacity: 0.1,
+    },
+  };
   return (
     <>
       {!isOpen && (

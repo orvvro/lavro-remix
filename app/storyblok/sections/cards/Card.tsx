@@ -12,6 +12,7 @@ export default function Card({
 }: {
   blok: SbBlokData & {
     heading: string;
+    summary?: string;
     text: SbBlokData[];
   };
 }) {
@@ -49,6 +50,7 @@ export default function Card({
         data-cursor-zone="card"
       >
         <h2>{blok.heading}</h2>
+        {blok.summary && <p>{blok.summary}</p>}
       </motion.div>
 
       {/* The Modal - always rendered, visibility controlled by state */}
@@ -92,6 +94,10 @@ const cardStyles = css`
 
   &:hover::before {
     opacity: 1;
+  }
+
+  h2 {
+    margin-bottom: 0.3em;
   }
 `;
 

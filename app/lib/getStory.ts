@@ -40,8 +40,10 @@ export default async function getStory(slug: string, ctx: any) {
     fullSlug = slug;
   }
 
-  const version = ctx.isProduction ? "published" : "draft";
-  const url = `https://api.storyblok.com/v2/cdn/stories/${fullSlug}?version=${version}&token=${accessToken}&cv=${Date.now()}`;
+  console.log("PRODUCTION: ", ctx.isProduction, " PREVIEW: ", ctx.isPreview);
+
+  const version = ctx.isProduction ? "" : "&version=draft";
+  const url = `https://api.storyblok.com/v2/cdn/stories/${fullSlug}?token=${accessToken}${version}&cv=${Date.now()}`;
   if (ctx.isProduction) {
     cachedBody = await getStoryFromCache(fullSlug, env);
   }

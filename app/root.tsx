@@ -57,12 +57,6 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   context.locale = locale;
   context.isProduction = isProduction;
   context.isPreview = isPreview;
-  console.log(
-    "PRODUCTION: ",
-    context.isProduction,
-    " PREVIEW: ",
-    context.isPreview
-  );
   const config = await getStory(`${locale}/config`, context);
 
   return Response.json({ config, locale });
