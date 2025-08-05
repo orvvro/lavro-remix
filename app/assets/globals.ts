@@ -22,6 +22,7 @@ export const globals = css`
       --step-4: clamp(2.0736rem, 1.7475rem + 1.6303vw, 3.0518rem);
       --step-5: clamp(2.4883rem, 2.0462rem + 2.2106vw, 3.8147rem);
       --color-black: #0d0d0d;
+      --color-transparent-black: #0d0d0d9f;
       --color-primary: #82d6e3;
       --color-secondary: #1463f5;
       --default-padding: clamp(0.5rem, -0.3333rem + 4.1667vw, 3rem);

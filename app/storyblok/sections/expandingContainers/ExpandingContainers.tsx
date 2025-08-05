@@ -24,33 +24,58 @@ const ExpandingContainers = ({ blok }: { blok: ExpandingContainersBlok }) => {
   const section = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const all = Array.from(
+    // Find all the pair wrappers using the class we added
+    const pairs = Array.from(
       section.current?.getElementsByClassName(
-        expandingContainer
+        pairStyles
       ) as HTMLCollectionOf<HTMLElement>
     );
 
-    all.forEach((container) => {
+    pairs.forEach((pair) => {
       if (!window.matchMedia(`(max-width: ${breakPoints.laptop}rem)`).matches) {
-        container.addEventListener("pointerenter", () => {
-          all.forEach((container) => {
-            container.style.setProperty("flex-grow", "0");
+        // Get all the individual expanding containers within this pair
+        const containers = Array.from(
+          pair.getElementsByClassName(expandingContainer)
+        ) as HTMLElement[];
+
+        // Add the hover listener to each container
+        containers.forEach((container) => {
+          container.addEventListener("pointerenter", () => {
+            // On hover, set all siblings to shrink
+            containers.forEach((c) => {
+              c.style.setProperty("flex-grow", "0");
+            });
+            // And set the hovered one to expand
+            container.style.setProperty("flex-grow", "1");
           });
-          container.style.setProperty("flex-grow", "1");
         });
       }
     });
   }, []);
 
+  const containerGroups = [];
+  for (let i = 0; i < blok.expanding_containers.length; i += 2) {
+    containerGroups.push(blok.expanding_containers.slice(i, i + 2));
+  }
+
   return (
     <Section className={sectionStyles} ref={section} blok={blok}>
-      <div className={centeredHeading}>
+      <div>
         {blok.heading && <h1>{formatText(blok.heading)}</h1>}
         {blok.sub_heading && <p>{blok.sub_heading}</p>}
       </div>
       <div className={expandingContainers}>
-        {blok.expanding_containers.map((blok) => (
-          <StoryblokServerComponent blok={blok} key={blok._uid} />
+        {/* Now map over the groups of containers */}
+        {containerGroups.map((group, index) => (
+          // This is the new div wrapping each pair
+          <div key={index} className={pairStyles}>
+            {group.map((containerBlok) => (
+              <StoryblokServerComponent
+                blok={containerBlok}
+                key={containerBlok._uid}
+              />
+            ))}
+          </div>
         ))}
       </div>
     </Section>
@@ -59,18 +84,33 @@ const ExpandingContainers = ({ blok }: { blok: ExpandingContainersBlok }) => {
 
 export default ExpandingContainers;
 
-const sectionStyles = css`
-  max-width: var(--smaller-max-width);
-`;
+const sectionStyles = css``;
 
-const expandingContainers = css`
+const expandingContainers = css``;
+
+const pairStyles = css`
   display: flex;
-  gap: 16px;
-
+  gap: 1em;
+  margin-top: 1em;
   @media screen and (max-width: ${breakPoints.laptop}rem) {
-    display: grid;
-    grid-auto-rows: 1fr;
-    grid-template-columns: min(440px, 100%);
-    justify-content: center;
+    & > div {
+      flex: 1;
+    }
+  }
+
+  @media screen and (max-width: ${breakPoints.mobile}rem) {
+    flex-direction: column;
+  }
+
+  &:nth-child(odd) {
+    & > div:last-child {
+      flex-grow: 1;
+    }
+  }
+
+  &:nth-child(even) {
+    & > div:first-child {
+      flex-grow: 1;
+    }
   }
 `;

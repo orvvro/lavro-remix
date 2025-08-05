@@ -112,7 +112,8 @@ const defaultLink = css`
 `;
 
 const highlightLink = css`
-  color: inherit;
+  padding: 0 0.8rem;
+  margin: 0 -0.8rem;
   color: transparent;
   transition: color 0.3s;
   background-image: linear-gradient(

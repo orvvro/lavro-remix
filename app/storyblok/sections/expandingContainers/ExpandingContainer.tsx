@@ -29,32 +29,26 @@ export default ExpandingContainer;
 
 export const expandingContainer = css`
   display: flex;
-  border: 2px solid gray;
   border-radius: 20px;
   transition: flex 0.3s;
-  background-color: var(--color-black);
+  background-color: var(--color-transparent-black);
   contain: content;
   overflow: hidden;
   flex-grow: 0;
-  &:first-child {
-    flex-grow: 1;
-  }
+
   @media screen and (max-width: ${breakPoints.laptop}rem) {
-    &:first-child {
-      flex-grow: auto;
-    }
+    flex-direction: column;
   }
 `;
 
 const text = css`
-  padding: 24px;
-  padding-right: 16px;
-  flex: 0 0 220px;
+  padding: 1.5em;
+  flex: 0 0 25rem;
   min-height: 17.5rem;
 
   h2 {
     padding-bottom: 4px;
-    font-size: 20px;
+    font-size: var(--step-1);
   }
 
   p {
@@ -63,18 +57,32 @@ const text = css`
 
   @media screen and (max-width: ${breakPoints.laptop}rem) {
     min-height: unset;
+    flex: auto;
   }
 `;
 
 const image = css`
   position: relative;
-  background-color: #333;
-  flex-grow: 1;
+  flex: 1;
 
   img {
     position: absolute;
-    object-fit: cover;
-    object-position: left;
-    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-right: 1.5rem;
+    max-height: 70%;
+  }
+
+  @media screen and (max-width: ${breakPoints.laptop}rem) {
+    flex-grow: initial;
+    img {
+      position: initial;
+      transform: none;
+      padding: var(--default-padding);
+      padding-top: 0;
+      margin: 0 auto;
+      max-height: 10em;
+    }
   }
 `;

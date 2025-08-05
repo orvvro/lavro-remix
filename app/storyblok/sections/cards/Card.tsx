@@ -85,7 +85,7 @@ const cardStyles = css`
   padding: 2rem;
   border-radius: 20px;
   cursor: pointer;
-  background-color: #0f0f0f5b;
+  background-color: var(--color-transparent-black);
 
   &::before {
     opacity: 0;
