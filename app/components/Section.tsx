@@ -21,6 +21,10 @@ export default function Section({
           <StoryblokServerComponent blok={blok} key={blok._uid} />
         ))}
       <div ref={ref} className={cx(defaultSpacing, className)}>
+        {Array.isArray(blok.heading) &&
+          blok.heading.map((blok: SbBlokData) => (
+            <StoryblokServerComponent blok={blok} key={blok._uid} />
+          ))}
         {children}
       </div>
     </section>

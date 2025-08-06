@@ -60,10 +60,6 @@ const ExpandingContainers = ({ blok }: { blok: ExpandingContainersBlok }) => {
 
   return (
     <Section className={sectionStyles} ref={section} blok={blok}>
-      <div>
-        {blok.heading && <h1>{formatText(blok.heading)}</h1>}
-        {blok.sub_heading && <p>{blok.sub_heading}</p>}
-      </div>
       <div className={expandingContainers}>
         {/* Now map over the groups of containers */}
         {containerGroups.map((group, index) => (
