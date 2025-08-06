@@ -66,7 +66,7 @@ export default async function getStory(slug: string, ctx: any) {
 
       console.log(`Story "${fullSlug}" fetched successfully from API.`);
 
-      if (response && import.meta.env.PROD) {
+      if (response && ctx.isProduction) {
         ctx.cloudflare.ctx.waitUntil(
           env.STORYBLOK_CACHE.put(fullSlug, bodyText, {
             // Use fullSlug here
