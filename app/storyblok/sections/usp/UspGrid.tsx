@@ -50,9 +50,6 @@ export default function UspGrid({ blok }: { blok: UspGridBlok }) {
 
   return (
     <Section ref={section} blok={blok}>
-      <div className={centeredHeading}>
-        {blok.heading && <h1>{formatText(blok.heading)}</h1>}
-      </div>
       <div className={cx(uspGrid, blok.style)}>
         {blok.usps.map((blok) => (
           <StoryblokServerComponent blok={blok} key={blok._uid} />

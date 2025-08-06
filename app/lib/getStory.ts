@@ -42,8 +42,8 @@ export default async function getStory(slug: string, ctx: any) {
 
   console.log("PRODUCTION: ", ctx.isProduction, " PREVIEW: ", ctx.isPreview);
 
-  const version = ctx.isProduction ? "" : "&version=draft";
-  const url = `https://api.storyblok.com/v2/cdn/stories/${fullSlug}?token=${accessToken}${version}&cv=${Date.now()}`;
+  const version = ctx.isProduction ? "published" : "draft";
+  const url = `https://api.storyblok.com/v2/cdn/stories/${fullSlug}?token=${accessToken}&version=${version}`;
   if (ctx.isProduction) {
     cachedBody = await getStoryFromCache(fullSlug, env);
   }

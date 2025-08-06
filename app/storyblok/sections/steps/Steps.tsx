@@ -15,10 +15,6 @@ interface StepsBlok extends SbBlokData {
 export default function Steps({ blok }: { blok: StepsBlok }) {
   return (
     <Section blok={blok}>
-      <div className={centeredHeading}>
-        {blok.heading && <h1>{formatText(blok.heading)}</h1>}
-        {blok.sub_heading && <p>{blok.sub_heading}</p>}
-      </div>
       <div className={steps} {...storyblokEditable(blok)} key={blok._uid}>
         {blok.steps.map((step, index) => (
           <StoryblokServerComponent blok={step} key={step._uid} index={index} />

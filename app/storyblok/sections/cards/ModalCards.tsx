@@ -15,10 +15,6 @@ export default function ModalCards({
 }) {
   return (
     <Section blok={blok}>
-      <div>
-        {blok.heading && <h1>{formatText(blok.heading)}</h1>}
-        {blok.sub_heading && <p>{blok.sub_heading}</p>}
-      </div>
       <div className={modalCards}>
         {blok.cards.map((blok) => (
           <StoryblokServerComponent blok={blok} key={blok._uid} />
