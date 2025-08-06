@@ -26,10 +26,13 @@ import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
 import { errorStyles } from "~/assets/globals";
 import getStory from "~/lib/getStory";
 import CustomCursor from "~/components/CustomCursor";
+
 const isProduction: boolean =
   import.meta.env.PROD && import.meta.env.MODE === "production";
 const isPreview: boolean = import.meta.env.MODE === "preview";
-export const accessToken = "xIPKdLuDyHrVplJXGlkvBgtt";
+export const accessToken = isProduction
+  ? "58Z2LNsx2wBQlBbr3QMbdQtt"
+  : "xIPKdLuDyHrVplJXGlkvBgtt";
 import { bodyWrapperStyles } from "~/assets/globals";
 
 storyblokInit({
