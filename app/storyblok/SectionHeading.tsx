@@ -3,18 +3,21 @@ import { formatText } from "~/lib/formatText";
 import { css, cx } from "@linaria/core";
 export default function SectionHeading({
   blok,
+  headingClassname,
 }: {
   blok: SbBlokData & {
     // Add any custom fields from your Storyblok component here.
     heading?: string;
     sub_heading?: string;
     style: string;
+    headingClassname?: string;
   };
+  headingClassname?: string;
 }) {
   return (
     <div
       {...storyblokEditable(blok)}
-      className={cx(headingContainer, blok.style)}
+      className={cx(headingContainer, blok.style, headingClassname)}
     >
       {blok.heading && <h1>{formatText(blok.heading)}</h1>}
       {blok.sub_heading && <p>{blok.sub_heading}</p>}

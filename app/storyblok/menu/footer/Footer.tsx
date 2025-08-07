@@ -23,6 +23,7 @@ export default function Footer({
 
 const footerStyles = css`
   margin: 0;
+  margin-top: 10rem;
   padding-top: 3rem;
   padding-bottom: 3rem;
 `;
@@ -30,5 +31,7 @@ const footerStyles = css`
 const container = css`
   display: flex;
   justify-content: space-between;
+  gap: 5rem;
+  flex-wrap: wrap;
   align-items: start;
 `;

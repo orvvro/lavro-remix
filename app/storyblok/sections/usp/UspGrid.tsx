@@ -5,8 +5,6 @@ import { useRef, useEffect } from "react";
 import { uspContainer } from "./Usp";
 import { breakPoints } from "~/assets/globals";
 import { css, cx } from "@linaria/core";
-import { formatText } from "~/lib/formatText";
-import { centeredHeading } from "~/assets/globals";
 
 interface UspGridBlok extends SbBlokData {
   heading?: string;

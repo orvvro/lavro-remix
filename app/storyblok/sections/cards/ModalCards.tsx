@@ -3,6 +3,7 @@ import Section from "~/components/Section";
 import { formatText } from "~/lib/formatText";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
 import { css } from "@linaria/core";
+import { breakPoints } from "~/assets/globals";
 
 export default function ModalCards({
   blok,
@@ -29,4 +30,8 @@ const modalCards = css`
   grid-template-columns: 1fr 1fr;
   gap: 2em;
   margin-top: 3rem;
+
+  @media (max-width: ${breakPoints.tablet}rem) {
+    grid-template-columns: 1fr;
+  }
 `;

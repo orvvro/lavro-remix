@@ -87,7 +87,6 @@ export default async function isValidPath(
 
       // 2. You correctly parse the string back into a JavaScript array.
       const pathArray = JSON.parse(cachedPaths);
-      console.log(pathArray);
       if (pathArray.length !== 0) {
         // 3. You correctly create the Set from the array and save it to memory.
         inMemoryPathSet = new Set(pathArray);

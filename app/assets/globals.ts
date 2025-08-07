@@ -244,7 +244,7 @@ export const ctaButton = css`
 export const bodyWrapperStyles = css`
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow: hidden;
   min-height: 100vh;
 
   & > main {

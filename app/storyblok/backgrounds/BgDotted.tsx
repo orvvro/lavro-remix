@@ -58,6 +58,7 @@ export default BgDotted;
 
 const bg = css`
   position: absolute;
+  z-index: -1;
   top: 0;
   left: 0;
   right: 0;
@@ -93,6 +94,7 @@ const bg = css`
 
 const xl = css`
   height: 200%;
+  top: -50%;
 `;
 
 const mouse = css`
