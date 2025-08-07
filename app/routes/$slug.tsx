@@ -9,6 +9,7 @@ import getStory from "~/lib/getStory";
 import timeSomething from "~/lib/timingFunction";
 import { verifyPreview } from "~/lib/verifyPreview";
 import { accessToken } from "~/root";
+import isValidPath from "~/lib/pathValidator";
 
 export async function loader({ params, context, request }: LoaderFunctionArgs) {
   if (import.meta.env.MODE === "preview") {
@@ -23,13 +24,8 @@ export async function loader({ params, context, request }: LoaderFunctionArgs) {
   const { "*": splat } = params;
   const slug = splat || "";
 
-  if (
-    slug.endsWith("home") ||
-    slug.endsWith("config") ||
-    slug === "json/version" ||
-    slug === "favicon.ico" ||
-    slug === "json/list"
-  ) {
+  if (!(await isValidPath(slug, context))) {
+    // If the path is not in our valid list, throw a 404 immediately.
     throw data(`Record "${slug}" Not Found`, { status: 404 });
   }
 

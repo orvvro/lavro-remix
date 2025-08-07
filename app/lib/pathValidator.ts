@@ -1,71 +1,118 @@
-import { useStoryblokApi } from "@storyblok/react/ssr";
-import getPathsAndLinks from "./getLinksAndPaths";
+import { cache } from "react";
+import getStoryblokLinks from "./getLinksAndPaths";
+import { transformSlugToStoryblokPath } from "~/lib/transformSlug";
+import { accessToken } from "~/root";
 
-const CACHE_KEY = "valid_storyblok_paths_i18n";
+const CACHE_KEY = "valid_storyblok_paths";
 
-// This will hold the paths in memory for the lifetime of the worker instance (fastest access)
+// Level 1 Cache: In-memory for the lifetime of the worker instance (fastest)
 let inMemoryPathSet: Set<string> | null = null;
 
 /**
- * Fetches the list of links from Storyblok, generates all localized paths, and caches them.
+ * Fetches all links from Storyblok, generates all localized paths, and caches them.
  */
 async function fetchAndCachePaths(ctx: any): Promise<Set<string>> {
   console.log(
-    "Path validator: Fetching and caching valid i18n paths from Storyblok..."
+    "Path validator: Cache miss. Fetching all paths from Storyblok..."
   );
-  const storyblokApi = useStoryblokApi();
-  // We get the `paths` array which already has the localized URLs
-  const { paths } = await getPathsAndLinks(storyblokApi, "published");
+
+  const links = await getStoryblokLinks(accessToken);
 
   const pathSet = new Set<string>();
 
-  // Convert the `paths` array into a clean Set of URL pathnames
-  for (const p of paths) {
-    const slug = p.params.slug;
-    if (slug === undefined) {
-      // The default language homepage slug is undefined, which corresponds to the root path
-      pathSet.add("/");
-    } else {
-      // For all other pages, construct the path. Remove trailing slash if it exists.
-      const path = `/${slug.endsWith("/") ? slug.slice(0, -1) : slug}`;
-      pathSet.add(path || "/"); // Add '/' as a fallback for empty paths
-    }
+  links
+    .filter(
+      (link) =>
+        !link.is_folder && !link.slug.endsWith("config") && link.slug !== "home" // Also filter out the raw 'home' slug
+    )
+    .forEach((link) => {
+      const storyblokPath = transformSlugToStoryblokPath(link.slug);
+      pathSet.add(storyblokPath);
+    });
+
+  if (pathSet.size === 0) {
+    console.error(
+      "Path validator: Fetched links resulted in an empty path set. Caching will be skipped to prevent a site-wide outage. This may indicate a temporary API issue."
+    );
+    // Return the empty set for this single request, but don't save it.
+    // The next request will trigger a new fetch attempt.
+    return pathSet;
   }
 
-  // Also cache in Cloudflare KV for subsequent requests/worker instances
-  if (ctx?.cloudflare?.env?.STORYBLOK_CACHE) {
+  const pathCache = ctx?.cloudflare?.env?.PATH_VALIDATOR_CACHE;
+
+  inMemoryPathSet = pathSet;
+  if (pathCache) {
     const cacheValue = JSON.stringify(Array.from(pathSet));
-    // Use waitUntil to not block the response while we write to the cache
     ctx.cloudflare.ctx.waitUntil(
-      ctx.cloudflare.env.STORYBLOK_CACHE.put(CACHE_KEY, cacheValue, {
+      pathCache.put(CACHE_KEY, cacheValue, {
         expirationTtl: 3600, // Cache for 1 hour
       })
     );
   }
 
+  console.log(`Path validator: Cached ${pathSet.size} valid paths.`);
   return pathSet;
 }
 
 /**
- * Gets the Set of valid paths, using a multi-layer cache for performance.
+ * Checks if a given URL pathname is a valid, published Storyblok path.
+ * Uses a multi-level cache for maximum performance.
+ * @param pathname The URL pathname to validate (e.g., "/about-us").
+ * @param ctx The server context containing Cloudflare bindings.
+ * @returns {Promise<boolean>} True if the path is valid, false otherwise.
  */
-export async function getValidPaths(ctx: any): Promise<Set<string>> {
-  // 1. Check in-memory cache first (zero latency)
-  if (inMemoryPathSet) {
-    return inMemoryPathSet;
+export default async function isValidPath(
+  pathname: string,
+  ctx: any
+): Promise<boolean> {
+  const storyblokPath = transformSlugToStoryblokPath(pathname);
+  console.log(`Validating raw path: "${pathname}" -> "${storyblokPath}"`);
+
+  // Level 1 & 2: Check caches
+  // ... (This part of the function is correct)
+  if (inMemoryPathSet && Array.from(inMemoryPathSet).length > 0) {
+    console.log("Path validator: Checking in-memory cache...", inMemoryPathSet);
+    return inMemoryPathSet.has(storyblokPath);
   }
 
-  // 2. Check Cloudflare KV cache (low latency)
-  if (ctx?.cloudflare?.env?.STORYBLOK_CACHE) {
-    const kvValue = await ctx.cloudflare.env.STORYBLOK_CACHE.get(CACHE_KEY);
-    if (kvValue) {
-      console.log("Path validator cache hit: KV");
-      inMemoryPathSet = new Set(JSON.parse(kvValue));
-      return inMemoryPathSet;
+  const pathCache = ctx?.cloudflare?.env?.PATH_VALIDATOR_CACHE;
+  if (pathCache) {
+    // 1. You correctly get the JSON string from the cache.
+    const cachedPaths = await pathCache.get(CACHE_KEY);
+
+    if (cachedPaths) {
+      // A simple check for null is sufficient
+      console.log("Path validator: Found cached string in KV.");
+
+      // 2. You correctly parse the string back into a JavaScript array.
+      const pathArray = JSON.parse(cachedPaths);
+      console.log(pathArray);
+      if (pathArray.length !== 0) {
+        // 3. You correctly create the Set from the array and save it to memory.
+        inMemoryPathSet = new Set(pathArray);
+
+        // 4. You correctly check against the newly created Set.
+        return inMemoryPathSet.has(storyblokPath);
+      }
     }
   }
+  // Level 3: Fetch from Storyblok API (source of truth)
+  console.log("Path validator: No cache found. Fetching from API...");
+  const pathSet = await fetchAndCachePaths(ctx);
 
-  // 3. If no cache, fetch from Storyblok API and populate caches
-  inMemoryPathSet = await fetchAndCachePaths(ctx);
-  return inMemoryPathSet;
+  // --- Start of the fix ---
+  // If the fetch resulted in an empty set, it likely failed.
+  // We "fail open" by returning true, allowing getStory to be the final check.
+  // This prevents a temporary API glitch from taking down the whole site.
+  if (pathSet.size === 0) {
+    console.warn(
+      "Path validator returned an empty set. Allowing request to proceed to getStory as a fallback."
+    );
+    return true;
+  }
+  // --- End of the fix ---
+
+  // If the fetch was successful and returned paths, check against it.
+  return pathSet.has(storyblokPath);
 }

@@ -2,6 +2,7 @@ import { data } from "react-router";
 import { getStoryFromCache } from "~/lib/storyblokCache";
 import { defaultLanguage, supportedLanguages } from "~/lib/i18n";
 import { accessToken } from "~/root";
+import { transformSlugToStoryblokPath } from "~/lib/transformSlug";
 
 export default async function getStory(slug: string, ctx: any) {
   const env = ctx.cloudflare.env;
@@ -18,29 +19,8 @@ export default async function getStory(slug: string, ctx: any) {
     throw data("Not Found", { status: 404 });
   }
 
-  let fullSlug: string;
-
-  // Case 1: The slug is an empty string, meaning it's the default homepage.
-  if (slug === "") {
-    fullSlug = `${defaultLanguage}/home`;
-  }
-
-  // Case 2: The slug is just a language code (e.g., "nl"), meaning it's a translated homepage.
-  else if (supportedLanguages.includes(slug) && !slug.includes("/")) {
-    fullSlug = `${slug}/home`;
-  }
-
-  // Case 3: The slug does not contain a language prefix, so it belongs to the default language.
-  else if (!supportedLanguages.includes(slug.split("/")[0])) {
-    fullSlug = `${defaultLanguage}/${slug}`;
-  }
-
-  // Case 4: The slug is already correctly formatted with a language prefix (e.g., "nl/about").
-  else {
-    fullSlug = slug;
-  }
-
-  console.log("PRODUCTION: ", ctx.isProduction, " PREVIEW: ", ctx.isPreview);
+  // Use the single source of truth to get the full slug
+  const fullSlug = transformSlugToStoryblokPath(slug);
 
   const version = ctx.isProduction ? "published" : "draft";
   const url = `https://api.storyblok.com/v2/cdn/stories/${fullSlug}?token=${accessToken}&version=${version}`;
@@ -53,8 +33,9 @@ export default async function getStory(slug: string, ctx: any) {
     console.log(`KV Cache hit for "${fullSlug}".`);
     body = JSON.parse(cachedBody);
   } else {
-    // 3. If the cache is empty, fetch from the API.
-    console.log(`KV Cache miss for "${fullSlug}". Fetching from API...`);
+    if (ctx.isProduction) {
+      console.log(`KV Cache miss for "${fullSlug}". Fetching from API...`);
+    }
     try {
       const response = await fetch(url);
       if (!response.ok) {
