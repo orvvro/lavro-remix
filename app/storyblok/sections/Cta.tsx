@@ -1,19 +1,20 @@
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
 import Section from "~/components/Section";
+import { formatText } from "~/lib/formatText";
 export default function Cta({
   blok,
 }: {
   blok: SbBlokData & {
     // Add any custom fields from your Storyblok component here.
-    heading?: string;
+    heading: string;
     description?: string;
     buttons?: SbBlokData[];
   };
 }) {
   return (
     <Section blok={blok}>
-      <h1>{blok.heading}</h1>
+      <h1>{formatText(blok.heading)}</h1>
       <p>{blok.description}</p>
       <div>
         {blok.buttons?.map((button) => (

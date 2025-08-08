@@ -2,34 +2,63 @@ import { StoryblokServerComponent } from "@storyblok/react/ssr";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { css, cx } from "@linaria/core";
 import { RemoveScroll } from "react-remove-scroll";
+import {
+  useScroll,
+  useMotionValueEvent,
+  motion,
+  type Variants,
+} from "motion/react";
+import { useState } from "react";
+import NavBarMenu from "~/components/NavBarMenu";
 
 interface NavigationBlok extends SbBlokData {
   logo: SbBlokData[];
   menu: MenuItemBlok[];
 }
 
-interface MenuItemBlok extends SbBlokData {
+export interface MenuItemBlok extends SbBlokData {
   link: {
     cached_url: string;
   };
 }
 
+const variants: Variants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    backdropFilter: "blur(5px)",
+    transition: {
+      type: "spring",
+      bounce: 0.2,
+      duration: 0.5,
+    },
+  },
+};
+
 export default function Navigation({ blok }: { blok: NavigationBlok }) {
+  const { scrollY } = useScroll();
+  const [scrollDirection, setScrollDirection] = useState("visible");
+
+  useMotionValueEvent(scrollY, "change", (current) => {
+    const prev = scrollY.getPrevious() || 0;
+    const diff = current - prev;
+    setScrollDirection(diff > 0 && prev > 0 ? "hidden" : "visible");
+    console.log(scrollDirection);
+  });
   return (
     <nav
       {...storyblokEditable(blok)}
       className={cx(navigationStyles, RemoveScroll.classNames.zeroRight)}
     >
-      <div>
+      <motion.div
+        initial="hidden"
+        variants={variants}
+        animate={scrollDirection}
+      >
         <StoryblokServerComponent blok={blok.logo[0]} />
-        <ul>
-          {blok.menu.map((link: MenuItemBlok) => (
-            <li key={link._uid}>
-              <StoryblokServerComponent blok={link} />
-            </li>
-          ))}
-        </ul>
-      </div>
+        <NavBarMenu items={blok.menu} />
+      </motion.div>
     </nav>
   );
 }
@@ -50,24 +79,7 @@ const navigationStyles = css`
     justify-content: space-between;
     padding: 1rem;
     padding-left: 2rem;
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: -1;
-      border-radius: 77px;
-      background-color: rgb(0 0 0 / 0.5);
-      backdrop-filter: blur(6px);
-    }
-  }
-
-  ul {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
+    background-color: var(--color-transparent-black);
+    border-radius: 77px;
   }
 `;

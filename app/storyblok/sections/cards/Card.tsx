@@ -131,7 +131,7 @@ const overlayStyles = css`
 `;
 
 const modalContentStyles = css`
-  background-color: #111;
+  background-color: var(--color-transparent-black);
   padding: 2rem;
   border: 1px solid #444;
   border-radius: 20px;

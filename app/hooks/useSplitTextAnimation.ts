@@ -1,4 +1,6 @@
-import { animate, stagger } from "motion";
+import { stagger } from "motion";
+import { spring } from "motion/react";
+import { animate } from "motion/react";
 import { useEffect, type RefObject } from "react";
 
 export function useSplitTextAnimation(ref: RefObject<HTMLElement>) {
@@ -20,7 +22,7 @@ export function useSplitTextAnimation(ref: RefObject<HTMLElement>) {
       allChars,
       { opacity: [0, 1], y: [8, 0], filter: ["blur(4px)", "blur(0)"] },
       {
-        type: "spring",
+        type: spring,
         duration: 1.5,
         delay: stagger(0.01),
       }
