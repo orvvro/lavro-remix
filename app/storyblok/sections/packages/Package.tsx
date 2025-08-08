@@ -3,8 +3,9 @@ import {
   StoryblokServerComponent,
   StoryblokServerRichText,
 } from "@storyblok/react/ssr";
-import { css } from "@linaria/core";
+import { css, cx } from "@linaria/core";
 import TiltingCard from "~/components/TiltingCard";
+import { gradientBorder } from "~/assets/globals";
 
 export default function Package({
   blok,
@@ -17,7 +18,7 @@ export default function Package({
   };
 }) {
   return (
-    <TiltingCard className={cardStyles}>
+    <TiltingCard className={cx(cardStyles, gradientBorder)}>
       <div {...storyblokEditable(blok)} className={packageStyles}>
         <h2>{blok.heading}</h2>
         <StoryblokServerRichText doc={blok.paragraph} />

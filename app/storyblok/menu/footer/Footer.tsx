@@ -31,7 +31,8 @@ const footerStyles = css`
 const container = css`
   display: flex;
   justify-content: space-between;
-  gap: 5rem;
+  column-gap: 5rem;
+  row-gap: 2rem;
   flex-wrap: wrap;
   align-items: start;
 `;

@@ -2,7 +2,7 @@ import { type SbBlokData } from "@storyblok/react";
 import Section from "~/components/Section";
 import { formatText } from "~/lib/formatText";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
-import { css } from "@linaria/core";
+import { css, cx } from "@linaria/core";
 import { breakPoints } from "~/assets/globals";
 
 export default function ModalCards({
@@ -12,11 +12,12 @@ export default function ModalCards({
     heading: string;
     sub_heading: string;
     cards: SbBlokData[];
+    style: string;
   };
 }) {
   return (
     <Section blok={blok}>
-      <div className={modalCards}>
+      <div className={cx(modalCards, blok.style)}>
         {blok.cards.map((blok) => (
           <StoryblokServerComponent blok={blok} key={blok._uid} />
         ))}
@@ -32,6 +33,10 @@ const modalCards = css`
   margin-top: 3rem;
 
   @media (max-width: ${breakPoints.tablet}rem) {
+    grid-template-columns: 1fr;
+  }
+
+  &.single {
     grid-template-columns: 1fr;
   }
 `;

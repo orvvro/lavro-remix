@@ -2,7 +2,7 @@ import { cx, css } from "@linaria/core";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
 import { motion, type Variants } from "motion/react";
-import { useMagneticPull } from "motion-plus/react";
+import { Image } from "cloudflare-image";
 import { useState, useRef } from "react";
 import { RemoveScroll } from "react-remove-scroll";
 import { gradientBorder } from "~/assets/globals";
@@ -14,6 +14,10 @@ export default function Card({
     heading: string;
     summary?: string;
     text: SbBlokData[];
+    image: {
+      filename: string;
+      alt: string;
+    };
   };
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,8 +53,17 @@ export default function Card({
         whileHover={{ scale: 1.02 }}
         data-cursor-zone="card"
       >
-        <h2>{blok.heading}</h2>
-        {blok.summary && <p>{blok.summary}</p>}
+        <div>
+          <h2>{blok.heading}</h2>
+          {blok.summary && <p>{blok.summary}</p>}
+        </div>
+        {blok.image && (
+          <Image
+            src={blok.image.filename}
+            alt={blok.image.alt || ""}
+            width={100}
+          />
+        )}
       </motion.div>
 
       {/* The Modal - always rendered, visibility controlled by state */}
@@ -86,6 +99,11 @@ const cardStyles = css`
   border-radius: 20px;
   cursor: pointer;
   background-color: var(--color-transparent-black);
+  max-width: 48rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3rem;
 
   &::before {
     opacity: 0;
@@ -125,5 +143,15 @@ const modalContentStyles = css`
   p,
   h2 {
     margin-bottom: 1em;
+  }
+
+  h2 + div ul {
+    padding-left: 1em;
+    margin: 1em 0;
+    list-style: disc;
+    list-style-position: inside;
+    li * {
+      display: inline;
+    }
   }
 `;
