@@ -13,7 +13,7 @@ const menuVariants: Variants = {
     transition: { type: "spring", duration: 0 },
   },
   open: {
-    clipPath: "circle(150% at top right)",
+    clipPath: "circle(150% at 80% 20%)",
     transition: {
       type: "spring",
       stiffness: 200,
@@ -23,12 +23,12 @@ const menuVariants: Variants = {
     },
   },
   closed: {
-    clipPath: "circle(0% at top right)",
+    clipPath: "circle(0% at 80% 20%)",
     transition: {
       type: "spring",
       stiffness: 400,
       damping: 40,
-      delay: 0.3,
+      delay: 0.1,
     },
   },
 };
@@ -152,6 +152,7 @@ const menuStyles = css`
     width: 15rem;
     padding: 2rem;
     background-color: var(--color-transparent-black);
+    backdrop-filter: blur(6px);
     border-radius: 20px;
   }
 `;

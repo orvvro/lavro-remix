@@ -2,14 +2,10 @@ import { StoryblokServerComponent } from "@storyblok/react/ssr";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { css, cx } from "@linaria/core";
 import { RemoveScroll } from "react-remove-scroll";
-import {
-  useScroll,
-  useMotionValueEvent,
-  motion,
-  type Variants,
-} from "motion/react";
+import { useScroll, useMotionValueEvent, type Variants } from "motion/react";
 import { useState } from "react";
 import NavBarMenu from "~/components/NavBarMenu";
+import * as motion from "motion/react-client";
 
 interface NavigationBlok extends SbBlokData {
   logo: SbBlokData[];
@@ -23,14 +19,16 @@ export interface MenuItemBlok extends SbBlokData {
 }
 
 const variants: Variants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    backdropFilter: "blur(5px)",
+  hidden: {
+    clipPath: "circle(0)",
     transition: {
-      type: "spring",
-      bounce: 0.2,
+      duration: 0.5,
+    },
+  },
+
+  visible: {
+    clipPath: "circle(100%)",
+    transition: {
       duration: 0.5,
     },
   },
@@ -51,11 +49,7 @@ export default function Navigation({ blok }: { blok: NavigationBlok }) {
       {...storyblokEditable(blok)}
       className={cx(navigationStyles, RemoveScroll.classNames.zeroRight)}
     >
-      <motion.div
-        initial="hidden"
-        variants={variants}
-        animate={scrollDirection}
-      >
+      <motion.div initial={false} animate={scrollDirection} variants={variants}>
         <StoryblokServerComponent blok={blok.logo[0]} />
         <NavBarMenu items={blok.menu} />
       </motion.div>
@@ -79,7 +73,19 @@ const navigationStyles = css`
     justify-content: space-between;
     padding: 1rem;
     padding-left: 2rem;
-    background-color: var(--color-transparent-black);
     border-radius: 77px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--color-transparent-black);
+      border-radius: inherit;
+      backdrop-filter: blur(6px);
+      z-index: -1;
+    }
   }
 `;
