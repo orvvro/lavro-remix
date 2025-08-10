@@ -42,7 +42,6 @@ export default function Navigation({ blok }: { blok: NavigationBlok }) {
     const prev = scrollY.getPrevious() || 0;
     const diff = current - prev;
     setScrollDirection(diff > 0 && prev > 0 ? "hidden" : "visible");
-    console.log(scrollDirection);
   });
   return (
     <nav

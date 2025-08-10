@@ -8,8 +8,8 @@ export default function CustomCursor() {
 
   const variants = {
     default: {
-      color: "black",
-      backgroundColor: "white",
+      color: "rgb(0, 0, 0)",
+      backgroundColor: "rgb(255, 255, 255)",
       borderRadius: 200,
     },
     pointer: {

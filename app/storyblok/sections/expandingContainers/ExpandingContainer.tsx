@@ -35,6 +35,7 @@ export const expandingContainer = css`
   contain: content;
   overflow: hidden;
   flex-grow: 0;
+  flex: 0 0 25rem;
 
   @media screen and (max-width: ${breakPoints.laptop}rem) {
     flex-direction: column;
@@ -42,8 +43,8 @@ export const expandingContainer = css`
 `;
 
 const text = css`
-  padding: 1.5em;
   flex: 0 0 25rem;
+  padding: 1.5em;
   min-height: 17.5rem;
 
   h2 {
@@ -63,7 +64,7 @@ const text = css`
 
 const image = css`
   position: relative;
-  flex: 1;
+  flex: auto;
 
   img {
     position: absolute;
