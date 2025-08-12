@@ -6,6 +6,7 @@ import { Image } from "cloudflare-image";
 import { useState, useRef } from "react";
 import { RemoveScroll } from "react-remove-scroll";
 import { gradientBorder } from "~/assets/globals";
+import { defaultChildVariants } from "~/assets/animations";
 
 export default function Card({
   blok,
@@ -45,10 +46,10 @@ export default function Card({
 
   return (
     <>
-      {/* This is the small, clickable card */}
       <motion.div
         {...storyblokEditable(blok)}
         className={cx(cardStyles, gradientBorder)}
+        variants={defaultChildVariants}
         onClick={() => setIsOpen(true)}
         whileHover={{ scale: 1.02 }}
         data-cursor-zone="card"

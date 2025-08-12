@@ -1,6 +1,7 @@
 import { css } from "@linaria/core";
 import PoppinsSemiBold from "~/assets/fonts/poppins-semibold-webfont.woff2";
 import PoppinsRegular from "~/assets/fonts/poppins-regular-webfont.woff2";
+
 export const breakPoints = {
   mobilexs: 25,
   mobile: 40,
@@ -8,6 +9,15 @@ export const breakPoints = {
   laptop: 64,
   desktop: 80,
 };
+
+export const errorStyles = css`
+  div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+`;
 
 export const globals = css`
   :global() {
@@ -146,6 +156,9 @@ export const globals = css`
       & > main {
         flex: 1;
         position: relative;
+      }
+      &:has(.${errorStyles}) {
+        overflow-y: scroll;
       }
     }
 
@@ -504,14 +517,5 @@ export const swiper = css`
     &::after {
       background-color: var(--color-blue);
     }
-  }
-`;
-
-export const errorStyles = css`
-  div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
 `;

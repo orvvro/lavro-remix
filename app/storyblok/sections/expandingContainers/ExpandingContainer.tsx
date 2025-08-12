@@ -1,8 +1,9 @@
 import { type SbBlokData, storyblokEditable } from "@storyblok/react";
 import { css } from "@linaria/core";
 import { breakPoints } from "~/assets/globals";
-
+import * as motion from "motion/react-client";
 import { Image } from "cloudflare-image";
+import { defaultChildVariants } from "~/assets/animations";
 
 export interface ExpandingContainerBlok extends SbBlokData {
   heading: string;
@@ -14,7 +15,11 @@ export interface ExpandingContainerBlok extends SbBlokData {
 }
 
 const ExpandingContainer = ({ blok }: { blok: ExpandingContainerBlok }) => (
-  <div className={expandingContainer} {...storyblokEditable(blok)}>
+  <motion.div
+    variants={defaultChildVariants}
+    className={expandingContainer}
+    {...storyblokEditable(blok)}
+  >
     <div className={text}>
       <h2>{blok.heading}</h2>
       <p>{blok.description}</p>
@@ -22,7 +27,7 @@ const ExpandingContainer = ({ blok }: { blok: ExpandingContainerBlok }) => (
     <div className={image}>
       <Image src={blok.image.filename} alt={blok.image.alt} draggable={false} />
     </div>
-  </div>
+  </motion.div>
 );
 
 export default ExpandingContainer;

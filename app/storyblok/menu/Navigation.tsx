@@ -20,7 +20,7 @@ export interface MenuItemBlok extends SbBlokData {
 
 const variants: Variants = {
   hidden: {
-    clipPath: "circle(0)",
+    clipPath: "circle(0%)",
     transition: {
       duration: 0.5,
     },
@@ -47,6 +47,7 @@ export default function Navigation({ blok }: { blok: NavigationBlok }) {
     <nav
       {...storyblokEditable(blok)}
       className={cx(navigationStyles, RemoveScroll.classNames.zeroRight)}
+      inert={scrollDirection === "hidden"}
     >
       <motion.div initial={false} animate={scrollDirection} variants={variants}>
         <StoryblokServerComponent blok={blok.logo[0]} />

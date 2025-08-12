@@ -2,6 +2,8 @@ import { css } from "@linaria/core";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { breakPoints } from "~/assets/globals";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
+import * as motion from "motion/react-client";
+import { defaultChildVariants } from "~/assets/animations";
 
 interface UspBlok extends SbBlokData {
   background: SbBlokData[];
@@ -12,7 +14,11 @@ interface UspBlok extends SbBlokData {
 
 export default function UspContainer({ blok }: { blok: UspBlok }) {
   return (
-    <div className={uspContainer} {...storyblokEditable(blok)}>
+    <motion.div
+      variants={defaultChildVariants}
+      className={uspContainer}
+      {...storyblokEditable(blok)}
+    >
       {blok.background.map((blok: SbBlokData) => (
         <StoryblokServerComponent blok={blok} key={blok._uid} />
       ))}
@@ -21,7 +27,7 @@ export default function UspContainer({ blok }: { blok: UspBlok }) {
       )}
       <h2>{blok.heading}</h2>
       <p>{blok.text}</p>
-    </div>
+    </motion.div>
   );
 }
 

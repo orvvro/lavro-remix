@@ -1,14 +1,16 @@
 import { type SbBlokData } from "@storyblok/react";
 import { css } from "@linaria/core";
 import Section from "~/components/Section";
-import { breakPoints, centeredHeading } from "~/assets/globals";
+import { breakPoints } from "~/assets/globals";
 import { useEffect, useRef } from "react";
 import {
   expandingContainer,
   type ExpandingContainerBlok,
 } from "./ExpandingContainer";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
-import { formatText } from "~/lib/formatText";
+import * as motion from "motion/react-client";
+import { useMediaQuery } from "~/hooks/useMediaQuery";
+import { whileInViewAnimationProps } from "~/assets/animations";
 
 interface ExpandingContainersBlok extends SbBlokData {
   heading?: string;
@@ -22,36 +24,63 @@ interface ExpandingContainersBlok extends SbBlokData {
 
 const ExpandingContainers = ({ blok }: { blok: ExpandingContainersBlok }) => {
   const section = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery(`(max-width: ${breakPoints.laptop}rem)`);
+
+  // ... (imports and component definition)
 
   useEffect(() => {
-    // Find all the pair wrappers using the class we added
-    const pairs = Array.from(
-      section.current?.getElementsByClassName(
-        pairStyles
-      ) as HTMLCollectionOf<HTMLElement>
-    );
+    const sectionEl = section.current;
+    if (!sectionEl) return;
 
-    pairs.forEach((pair) => {
-      if (!window.matchMedia(`(max-width: ${breakPoints.laptop}rem)`).matches) {
-        // Get all the individual expanding containers within this pair
+    // Find all the pair wrappers
+    const pairs = Array.from(
+      sectionEl.getElementsByClassName(pairStyles)
+    ) as HTMLElement[];
+
+    // Define the event handler function so we can reference it for removal
+    const handlePointerEnter = (
+      container: HTMLElement,
+      allContainers: HTMLElement[]
+    ) => {
+      allContainers.forEach((c) => c.style.setProperty("flex-grow", "0"));
+      container.style.setProperty("flex-grow", "1");
+    };
+
+    // --- Start of Fix ---
+
+    // 1. Create an array to hold all the listeners we add, so we can remove them later.
+    const addedListeners: {
+      container: HTMLElement;
+      handler: () => void;
+    }[] = [];
+
+    if (!isMobile) {
+      pairs.forEach((pair) => {
         const containers = Array.from(
           pair.getElementsByClassName(expandingContainer)
         ) as HTMLElement[];
 
-        // Add the hover listener to each container
         containers.forEach((container) => {
-          container.addEventListener("pointerenter", () => {
-            // On hover, set all siblings to shrink
-            containers.forEach((c) => {
-              c.style.setProperty("flex-grow", "0");
-            });
-            // And set the hovered one to expand
-            container.style.setProperty("flex-grow", "1");
-          });
+          // Create a specific handler for this container
+          const handler = () => handlePointerEnter(container, containers);
+          container.addEventListener("pointerenter", handler);
+          // Store the container and its handler for cleanup
+          addedListeners.push({ container, handler });
         });
-      }
-    });
-  }, []);
+      });
+    }
+
+    // 2. Return a cleanup function from the effect.
+    // This will run when `isMobile` changes or when the component unmounts.
+    return () => {
+      addedListeners.forEach(({ container, handler }) => {
+        container.removeEventListener("pointerenter", handler);
+      });
+    };
+    // --- End of Fix ---
+  }, [isMobile]); // The dependency array is correct.
+
+  // ... (rest of the component)
 
   const containerGroups = [];
   for (let i = 0; i < blok.expanding_containers.length; i += 2) {
@@ -61,17 +90,19 @@ const ExpandingContainers = ({ blok }: { blok: ExpandingContainersBlok }) => {
   return (
     <Section className={sectionStyles} ref={section} blok={blok}>
       <div className={expandingContainers}>
-        {/* Now map over the groups of containers */}
         {containerGroups.map((group, index) => (
-          // This is the new div wrapping each pair
-          <div key={index} className={pairStyles}>
+          <motion.div
+            {...whileInViewAnimationProps}
+            key={index}
+            className={pairStyles}
+          >
             {group.map((containerBlok) => (
               <StoryblokServerComponent
                 blok={containerBlok}
                 key={containerBlok._uid}
               />
             ))}
-          </div>
+          </motion.div>
         ))}
       </div>
     </Section>

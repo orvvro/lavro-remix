@@ -1,9 +1,10 @@
 import { type SbBlokData } from "@storyblok/react";
 import Section from "~/components/Section";
-import { formatText } from "~/lib/formatText";
+import * as motion from "motion/react-client";
 import { StoryblokServerComponent } from "@storyblok/react/ssr";
 import { css, cx } from "@linaria/core";
 import { breakPoints } from "~/assets/globals";
+import { whileInViewAnimationProps } from "~/assets/animations";
 
 export default function ModalCards({
   blok,
@@ -17,11 +18,14 @@ export default function ModalCards({
 }) {
   return (
     <Section blok={blok}>
-      <div className={cx(modalCards, blok.style)}>
+      <motion.div
+        {...whileInViewAnimationProps}
+        className={cx(modalCards, blok.style)}
+      >
         {blok.cards.map((blok) => (
           <StoryblokServerComponent blok={blok} key={blok._uid} />
         ))}
-      </div>
+      </motion.div>
     </Section>
   );
 }

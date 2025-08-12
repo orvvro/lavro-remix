@@ -20,6 +20,7 @@ export default function RichText({
 
 const richTextStyles = css`
   max-width: 65ch;
+  margin: 0 auto;
 
   div {
     & > * {

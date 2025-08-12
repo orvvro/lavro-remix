@@ -64,7 +64,11 @@ export default function NavBarMenu({ items }: { items: MenuItemBlok[] }) {
         id={menuId}
       >
         {items.map((link: MenuItemBlok) => (
-          <motion.li variants={itemVariants} key={link._uid}>
+          <motion.li
+            variants={itemVariants}
+            key={link._uid}
+            onClick={() => setIsOpen(false)}
+          >
             <StoryblokServerComponent blok={link} />
           </motion.li>
         ))}

@@ -26,7 +26,6 @@ import getLocaleFromRequest from "~/lib/getLocaleFromRequest";
 import { errorStyles } from "~/assets/globals";
 import getStory from "~/lib/getStory";
 import CustomCursor from "~/components/CustomCursor";
-import getStoryblokLinks from "./lib/getLinksAndPaths";
 
 const isProduction: boolean =
   import.meta.env.PROD && import.meta.env.MODE === "production";

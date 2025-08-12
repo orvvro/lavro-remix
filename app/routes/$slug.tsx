@@ -24,7 +24,7 @@ export async function loader({ params, context, request }: LoaderFunctionArgs) {
   const { "*": splat } = params;
   const slug = splat || "";
 
-  if (!(await isValidPath(slug, context))) {
+  if (context.isProduction && !(await isValidPath(slug, context))) {
     // If the path is not in our valid list, throw a 404 immediately.
     throw data(`Record "${slug}" Not Found`, { status: 404 });
   }

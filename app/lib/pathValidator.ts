@@ -72,7 +72,7 @@ export default async function isValidPath(
   // Level 1 & 2: Check caches
   // ... (This part of the function is correct)
   if (inMemoryPathSet && Array.from(inMemoryPathSet).length > 0) {
-    console.log("Path validator: Checking in-memory cache...", inMemoryPathSet);
+    console.log("Path validator: Checking in-memory cache...");
     return inMemoryPathSet.has(storyblokPath);
   }
 
