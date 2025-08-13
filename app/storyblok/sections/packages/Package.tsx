@@ -42,9 +42,9 @@ const packageStyles = css`
   }
 
   h2 + div ul {
+    padding-left: 1em;
     margin-top: 1em;
     list-style: disc;
-    list-style-position: inside;
     li * {
       display: inline;
     }

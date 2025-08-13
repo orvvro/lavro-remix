@@ -57,12 +57,6 @@ export default function TextImageBlock({
   // 3. Transform the 0-1 scroll progress into a y-position from -35% to 35%
   const y = useTransform(scrollYProgress, [0, 1], ["-35%", "35%"]);
 
-  const smoothY = useSpring(y, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
   return (
     <motion.div
       variants={containerVariants}
@@ -76,7 +70,7 @@ export default function TextImageBlock({
     >
       <motion.small variants={itemVariants}>{blok.small_heading}</motion.small>
       <motion.h2 variants={itemVariants}>{blok.heading}</motion.h2>
-      <motion.div variants={itemVariants}>
+      <motion.div variants={itemVariants} className={richText}>
         <StoryblokServerRichText doc={blok.paragraph} />
       </motion.div>
       {blok.cta?.map((cta) => (
@@ -99,6 +93,22 @@ const textImageStyles = css`
     );
     background-clip: text;
   }
-
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  & > * {
+    margin-bottom: 1em;
+  }
   max-width: 32rem;
+`;
+
+const richText = css`
+  ul {
+    padding-left: 1em;
+    margin: 1em 0;
+    list-style: disc;
+    li * {
+      display: inline;
+    }
+  }
 `;

@@ -93,7 +93,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body style={{ backgroundColor: "#0d0d0d" }}>
         <CalDialogProvider>
           <div className={bodyWrapperStyles}>
             <StoryblokServerComponent blok={content?.header[0]} />

@@ -58,7 +58,7 @@ export default function Card({
           <h2>{blok.heading}</h2>
           {blok.summary && <p>{blok.summary}</p>}
         </div>
-        {blok.image && (
+        {blok.image?.filename && (
           <Image
             src={blok.image.filename}
             alt={blok.image.alt || ""}
@@ -103,7 +103,6 @@ const cardStyles = css`
   max-width: 48rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
   gap: 3rem;
 
   &::before {
@@ -113,6 +112,10 @@ const cardStyles = css`
 
   &:hover::before {
     opacity: 1;
+  }
+
+  &:has(img) {
+    align-items: center;
   }
 
   h2 {
@@ -150,7 +153,6 @@ const modalContentStyles = css`
     padding-left: 1em;
     margin: 1em 0;
     list-style: disc;
-    list-style-position: inside;
     li * {
       display: inline;
     }

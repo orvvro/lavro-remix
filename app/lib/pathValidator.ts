@@ -100,18 +100,12 @@ export default async function isValidPath(
   console.log("Path validator: No cache found. Fetching from API...");
   const pathSet = await fetchAndCachePaths(ctx);
 
-  // --- Start of the fix ---
-  // If the fetch resulted in an empty set, it likely failed.
-  // We "fail open" by returning true, allowing getStory to be the final check.
-  // This prevents a temporary API glitch from taking down the whole site.
   if (pathSet.size === 0) {
     console.warn(
       "Path validator returned an empty set. Allowing request to proceed to getStory as a fallback."
     );
     return true;
   }
-  // --- End of the fix ---
 
-  // If the fetch was successful and returned paths, check against it.
   return pathSet.has(storyblokPath);
 }
