@@ -27,7 +27,7 @@ const variants: Variants = {
   },
 
   visible: {
-    clipPath: "circle(100%)",
+    clipPath: "circle(160%)",
     transition: {
       duration: 0.5,
     },

@@ -11,7 +11,7 @@ let inMemoryPathSet: Set<string> | null = null;
 /**
  * Fetches all links from Storyblok, generates all localized paths, and caches them.
  */
-async function fetchAndCachePaths(ctx: any): Promise<Set<string>> {
+export async function fetchAndCachePaths(ctx: any): Promise<Set<string>> {
   console.log(
     "Path validator: Cache miss. Fetching all paths from Storyblok..."
   );
@@ -108,4 +108,27 @@ export default async function isValidPath(
   }
 
   return pathSet.has(storyblokPath);
+}
+
+export async function revalidatePaths(ctx: any): Promise<void> {
+  console.log("Path validator: Revalidation triggered.");
+
+  // Step 1: Clear the fast, in-memory cache.
+  inMemoryPathSet = null;
+  console.log("Path validator: In-memory cache cleared.");
+
+  // Step 2: Clear the persistent KV cache.
+  const pathCache = ctx?.cloudflare?.env?.PATH_VALIDATOR_CACHE;
+  if (pathCache) {
+    await pathCache.delete(CACHE_KEY);
+    console.log("Path validator: KV cache cleared.");
+  }
+
+  // Step 3 (Optional but Recommended): Pre-warm the cache.
+  // This fetches the new paths immediately so the next user doesn't
+  // have to wait for the API call.
+  console.log("Path validator: Pre-warming cache with fresh paths...");
+  await fetchAndCachePaths(ctx);
+
+  console.log("Path validator: Revalidation complete.");
 }
