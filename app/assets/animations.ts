@@ -26,5 +26,9 @@ export const whileInViewAnimationProps = {
   whileInView: "show",
   initial: "hidden",
 
-  viewport: { once: import.meta.env.PROD, margin: "-480px" },
+  viewport: {
+    once: import.meta.env.PROD,
+    amount: 0,
+    margin: "0px 0px -480px 0px",
+  },
 };
