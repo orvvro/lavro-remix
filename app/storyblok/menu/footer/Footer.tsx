@@ -29,10 +29,9 @@ const footerStyles = css`
 `;
 
 const container = css`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   column-gap: 5rem;
-  row-gap: 2rem;
-  flex-wrap: wrap;
+  row-gap: 4rem;
   align-items: start;
 `;
