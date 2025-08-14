@@ -24,7 +24,7 @@ export default function UspGrid({ blok }: { blok: UspGridBlok }) {
       ) as HTMLCollectionOf<HTMLElement>
     );
 
-    if (!window.matchMedia(`(max-width: ${breakPoints.mobile}rem)`).matches) {
+    if (window.matchMedia("(hover: hover)").matches) {
       window.addEventListener(
         "pointermove",
         (e) => {
@@ -41,10 +41,6 @@ export default function UspGrid({ blok }: { blok: UspGridBlok }) {
         },
         { passive: true }
       );
-    } else {
-      containers.forEach((el, index) => {
-        el.style.setProperty("top", `${index * 7 + 22}px`);
-      });
     }
   }, []);
 

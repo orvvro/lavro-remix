@@ -47,8 +47,15 @@ const itemVariants: Variants = {
   },
 };
 
-export default function NavBarMenu({ items }: { items: MenuItemBlok[] }) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function NavBarMenu({
+  items,
+  isOpen,
+  setIsOpen,
+}: {
+  items: MenuItemBlok[];
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}) {
   const isMobile = useMediaQuery(`(max-width: ${breakPoints.tablet}rem)`);
   const menuId = useId();
 
@@ -56,7 +63,7 @@ export default function NavBarMenu({ items }: { items: MenuItemBlok[] }) {
     <div>
       <HamburgerMenu isOpen={isOpen} setIsOpen={setIsOpen} />
       <motion.ul
-        initial={false}
+        initial={{ clipPath: "circle(0% at 80% 20%)" }}
         animate={isMobile ? (isOpen ? "open" : "closed") : "desktop"}
         variants={menuVariants}
         className={menuStyles}

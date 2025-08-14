@@ -27,7 +27,7 @@ const variants: Variants = {
   },
 
   visible: {
-    clipPath: "circle(160%)",
+    clipPath: "circle(100%)",
     transition: {
       duration: 0.5,
     },
@@ -37,6 +37,7 @@ const variants: Variants = {
 export default function Navigation({ blok }: { blok: NavigationBlok }) {
   const { scrollY } = useScroll();
   const [scrollDirection, setScrollDirection] = useState("visible");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (current) => {
     const prev = scrollY.getPrevious() || 0;
@@ -47,11 +48,20 @@ export default function Navigation({ blok }: { blok: NavigationBlok }) {
     <nav
       {...storyblokEditable(blok)}
       className={cx(navigationStyles, RemoveScroll.classNames.zeroRight)}
-      inert={scrollDirection === "hidden"}
+      inert={scrollDirection === "hidden" && !menuOpen}
     >
-      <motion.div initial={false} animate={scrollDirection} variants={variants}>
+      <motion.div
+        initial={false}
+        animate={scrollDirection}
+        variants={variants}
+        className={cx(menuOpen && menuOpenStyles)}
+      >
         <StoryblokServerComponent blok={blok.logo[0]} />
-        <NavBarMenu items={blok.menu} />
+        <NavBarMenu
+          items={blok.menu}
+          isOpen={menuOpen}
+          setIsOpen={setMenuOpen}
+        />
       </motion.div>
     </nav>
   );
@@ -88,4 +98,8 @@ const navigationStyles = css`
       z-index: -1;
     }
   }
+`;
+
+const menuOpenStyles = css`
+  clip-path: none !important;
 `;
